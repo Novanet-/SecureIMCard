@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-gb"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The javacardOS forum is a professional community for javacard developers to communicate with others.This forum help you prevent problems and resolve issues.It also provides the javacard development tools,open source applet and development device resource.">
+<meta name="keywords" content="javacard api,javacard applet,javacard download,javacard forum,jcide,smartcard driver,smartcard development">
+<link rel="shortcut icon" href="http://www.javacardos.com/store/images/javacardos.ico" type="image/x-icon">
+<link href="RSASampleCode_files/css.css" rel="stylesheet" type="text/css">
+
+<title>The ALgorithm of RSA Sample Code - JavaCard OS</title>
+
+	<link rel="alternate" type="application/atom+xml" title="Feed - JavaCard OS" href="http://www.javacardos.com/javacardforum/feed.php">			<link rel="alternate" type="application/atom+xml" title="Feed - New Topics" href="http://www.javacardos.com/javacardforum/feed.php?mode=topics">		<link rel="alternate" type="application/atom+xml" title="Feed - Forum - Applets Development Guide" href="http://www.javacardos.com/javacardforum/feed.php?f=31">	<link rel="alternate" type="application/atom+xml" title="Feed - Topic - The ALgorithm of RSA Sample Code" href="http://www.javacardos.com/javacardforum/feed.php?f=31&amp;t=737">
+	<link rel="canonical" href="http://www.javacardos.com/javacardforum/viewtopic.php?t=737">
+
+<!--
+	phpBB style name: prosilver
+	Based on style:   prosilver (this is the default phpBB3 style)
+	Original author:  Tom Beddard ( http://www.subBlue.com/ )
+	Modified by:
+-->
+
+
+<link href="RSASampleCode_files/stylesheet.css" rel="stylesheet">
+<link href="RSASampleCode_files/stylesheet_002.css" rel="stylesheet">
+<link href="RSASampleCode_files/responsive.css" rel="stylesheet" media="all and (max-width: 700px), all and (max-device-width: 700px)">
+
+
+
+<!--[if lte IE 9]>
+	<link href="./styles/prosilver/theme/tweaks.css?assets_version=100" rel="stylesheet">
+<![endif]-->
+
+		
+		
+<link href="RSASampleCode_files/disclaimer.css" rel="stylesheet" type="text/css" media="screen, projection">
+<link href="RSASampleCode_files/caramel.css" rel="stylesheet" type="text/css" media="screen, projection">
+<link href="RSASampleCode_files/boardannouncements.css" rel="stylesheet" type="text/css" media="screen, projection">
+
+
+    <link rel="stylesheet" href="RSASampleCode_files/common.css">
+
+    <script async="" src="RSASampleCode_files/analytics.js"></script><script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+    ga('create', 'UA-62638309-1', 'auto');
+    ga('send', 'pageview');
+    
+    </script>
+<style id="zoomLevel-styles"></style></head>
+<body id="phpbb" class="notouch section-viewtopic ltr hasjs">
+
+    <div class="common-header-container">
+        <div class="wrap">
+			<div id="page-header">
+				<div class="headerbar" role="banner">
+					<div class="inner">
+						  <img id="inner_img" src="RSASampleCode_files/javacardos-forum.png" alt="JavaCard OS | Javacard,Smartcard reader,Javacard Development Kit">
+										
+										<div class="pull-right">
+						<div class="inner barley-right">
+						
+						 <ul id="nav-main" class="linklist bulletin" style="margin-top:15px; " role="menubar">
+																	<li class="small-icon icon-logout rightside" data-skip-responsive="true"><a href="http://www.javacardos.com/javacardforum/ucp.php?mode=login&amp;redirect=%2Fjavacardforum%2Fviewtopic.php%3Ff%3D31%26amp%3Bt%3D737" title="Login" accesskey="x" role="menuitem">Login</a></li>
+																			<li class="small-icon icon-register rightside" data-skip-responsive="true"><a href="http://www.javacardos.com/javacardforum/ucp.php?mode=register" role="menuitem">Register</a></li>
+																																	<li class="rightside small-icon" style="width:5px; solid #EEE; "></li>
+																												 														
+							<li id="quick-links" class="rightside small-icon responsive-menu dropdown-container" data-skip-responsive="true">
+							   <a href="#" class="responsive-menu-link dropdown-trigger dropdown-toggle">Quick links </a>
+								<div class="dropdown hidden">
+									<div class="pointer"><div class="pointer-inner"></div></div>
+									<ul class="dropdown-contents" role="menu">
+															
+																					<li class="separator"></li>
+																																												<li class="small-icon icon-search-unanswered"><a href="http://www.javacardos.com/javacardforum/search.php?search_id=unanswered" role="menuitem">Unanswered posts</a></li>
+											<li class="small-icon icon-search-active"><a href="http://www.javacardos.com/javacardforum/search.php?search_id=active_topics" role="menuitem">Active topics</a></li>
+											<li class="separator"></li>
+											<li class="small-icon icon-search"><a href="http://www.javacardos.com/javacardforum/search.php" role="menuitem">Search</a></li>
+															
+																					<li class="separator"></li>
+											<li class="small-icon icon-members"><a href="http://www.javacardos.com/javacardforum/memberlist.php" role="menuitem">Members</a></li>											<li class="small-icon icon-team"><a href="http://www.javacardos.com/javacardforum/memberlist.php?mode=team" role="menuitem">The team</a></li>																				<li class="separator"></li>
+					
+																			</ul>
+								</div>
+							</li>
+					
+					
+						</ul>
+														<div id="search-box" class="search-box search-header" style="margin-top:5px; box-shadow:none; ">
+								<form action="./search.php" method="get" id="search">
+								<fieldset>
+									<a class="btn btn-md btn-white" style="float:left;" href="mailto:javacardos@gmail.com">
+										<i class="icon icon-envelope red"></i>		Contact Us
+									</a> 
+									<input name="keywords" id="keywords" maxlength="128" title="Search for keywords" class="inputbox search tiny" size="20" placeholder="Search…" type="search">
+									<button class="button icon-button search-icon" type="submit" title="Search">Search</button>
+									<a href="http://www.javacardos.com/javacardforum/search.php" class="button icon-button search-adv-icon" title="Advanced search">Advanced search</a>
+									
+								</fieldset>
+								</form>
+							</div>
+                						</div>
+						 <div id="NavbarCollapse">
+							<a title="Javacard industry news" href="http://www.javacardos.com/news" rel="next">NEWS</a>  
+							<a title="Javacard online store" href="http://www.javacardos.com/store" current-menu="1" rel="start">STORE</a>  
+							<a title="Javacard specialty community" href="http://www.javacardos.com/javacardforum" class="active" rel="next">FORUM</a>
+							 <a title="Javacard wikipedia" href="http://www.javacardos.com/wiki" rel="next">WIKI</a> 
+							 <a title="Javacard tools" href="http://www.javacardos.com/tools" id="forum" rel="next">TOOLS</a> 
+							 <a title="Javacard about" href="http://www.javacardos.com/about" rel="next">ABOUT</a> 
+					   </div>
+						</div>
+
+					</div>
+					<div role="navigation">
+						 
+						
+					</div>
+
+				</div>
+							</div>
+		</div>
+	</div>
+		<div class="fixedTop"></div>
+<div id="wrap">
+	<a id="top" class="anchor" accesskey="t"></a>
+	<div id="page-header">
+		<!--div class="headerbar" role="banner">
+			<div class="inner">
+
+			<div id="site-description">
+				<a id="logo" class="logo" href="http://javacardos.com/" title="Welcome to JavaCardOS"><span class="imageset site_logo"></span></a>
+				<h1>JavaCard OS</h1>
+				<p>JavaCardOS - JavaCardForum</p>
+				<p class="skiplink"><a href="#start_here">Skip to content</a></p>
+			</div>
+
+									<div id="search-box" class="search-box search-header" role="search">
+				<form action="./search.php" method="get" id="search">
+				<fieldset>
+					<input name="keywords" id="keywords" type="search" maxlength="128" title="Search for keywords" class="inputbox search tiny" size="20" value="" placeholder="Search…" />
+					<button class="button icon-button search-icon" type="submit" title="Search">Search</button>
+					<a href="./search.php" class="button icon-button search-adv-icon" title="Advanced search">Advanced search</a>
+					
+				</fieldset>
+				</form>
+			</div>
+			 
+			</div>
+			</div-->
+				<div class="navbar" role="navigation">
+	<div class="inner">
+
+	<!--ul id="nav-main" class="linklist bulletin" role="menubar">
+
+		<li id="quick-links" class="small-icon responsive-menu dropdown-container" data-skip-responsive="true">
+			<a href="#" class="responsive-menu-link dropdown-trigger">Quick links</a>
+			<div class="dropdown hidden">
+				<div class="pointer"><div class="pointer-inner"></div></div>
+				<ul class="dropdown-contents" role="menu">
+					
+											<li class="separator"></li>
+																								<li class="small-icon icon-search-unanswered"><a href="./search.php?search_id=unanswered" role="menuitem">Unanswered posts</a></li>
+						<li class="small-icon icon-search-active"><a href="./search.php?search_id=active_topics" role="menuitem">Active topics</a></li>
+						<li class="separator"></li>
+						<li class="small-icon icon-search"><a href="./search.php" role="menuitem">Search</a></li>
+					
+											<li class="separator"></li>
+						<li class="small-icon icon-members"><a href="./memberlist.php" role="menuitem">Members</a></li>						<li class="small-icon icon-team"><a href="./memberlist.php?mode=team" role="menuitem">The team</a></li>										<li class="separator"></li>
+
+									</ul>
+			</div>
+		</li>
+
+				<li class="small-icon icon-faq" data-skip-responsive="true"><a href="./faq.php" rel="help" title="Frequently Asked Questions" role="menuitem">FAQ</a></li>
+						
+			<li class="small-icon icon-logout rightside"  data-skip-responsive="true"><a href="./ucp.php?mode=login&redirect=%2Fjavacardforum%2Fviewtopic.php%3Ff%3D31%26amp%3Bt%3D737" title="Login" accesskey="x" role="menuitem">Login</a></li>
+					<li class="small-icon icon-register rightside" data-skip-responsive="true"><a href="./ucp.php?mode=register" role="menuitem">Register</a></li>
+						</ul-->
+
+	<ul id="nav-breadcrumbs" class="linklist navlinks" style="border-top:none; " role="menubar">
+						<li class="small-icon icon-home breadcrumbs" style="max-width: 1125px;">
+			<span class="crumb"><a href="http://javacardos.com/" itemtype="http://data-vocabulary.org/Breadcrumb" itemscope="" data-navbar-reference="home" title="Welcome to JavaCardOS">Welcome to JavaCardOS</a></span>						<span class="crumb"><a href="http://www.javacardos.com/javacardforum/index.php" accesskey="h" itemtype="http://data-vocabulary.org/Breadcrumb" itemscope="" data-navbar-reference="index" title="JavaCardForum">JavaCardForum</a></span>
+											<span class="crumb"><a href="http://www.javacardos.com/javacardforum/viewforum.php?f=13" itemtype="http://data-vocabulary.org/Breadcrumb" itemscope="" data-forum-id="13" title="JavaCard Application">JavaCard Application</a></span>
+															<span class="crumb"><a href="http://www.javacardos.com/javacardforum/viewforum.php?f=31" itemtype="http://data-vocabulary.org/Breadcrumb" itemscope="" data-forum-id="31" title="Applets Development Guide">Applets Development Guide</a></span>
+												</li>
+		
+					<li class="rightside responsive-search" style="display: none;"><a href="http://www.javacardos.com/javacardforum/search.php" title="View the advanced search options" role="menuitem">Search</a></li>
+			</ul>
+
+	</div>
+</div>
+	</div>
+
+	
+	<a id="start_here" class="anchor"></a>
+	<div id="page-body" role="main">
+		
+				<div id="phpbb_announcement" style="background-color:#ECD5D8">
+				<div><span style="font-size: 105%; line-height: normal"> A new smart card solution - <a href="https://www.javacardos.com/wiki/index.php/home/article/detail/category/sign_office.html" class="postlink">Digitally sign office documents with eJavaToken</a> has been launched.<br>   <br>
+     This solution can help you authenticate digital information to 
+guarantee the document contents authenticity,integrity and 
+non-repudiation. <br>       <br>     For more details, please check this <a href="https://www.javacardos.com/wiki/index.php/home/article/detail/category/sign_office.html" class="postlink">article</a>.<br>    <br>- The JavaCardOS Team<br></span></div>
+	</div>
+
+<h2 class="topic-title"><a href="http://www.javacardos.com/javacardforum/viewtopic.php?f=31&amp;t=737">The ALgorithm of RSA Sample Code</a></h2>
+<!-- NOTE: remove the style="display: none" when you want to have the forum description on the topic body -->
+<div style="display: none !important;">Applets Development Guide<br></div>
+<p>
+	<strong>Moderator:</strong> <a href="http://www.javacardos.com/javacardforum/memberlist.php?mode=viewprofile&amp;u=82" class="username">product</a>
+</p>
+
+
+<div class="action-bar top">
+
+	<div class="buttons">
+		
+			<a href="http://www.javacardos.com/javacardforum/posting.php?mode=reply&amp;f=31&amp;t=737" class="button icon-button reply-icon" title="Post a reply">
+			Post Reply		</a>
+	
+		<a href="http://www.javacardos.com/javacardforum/viewtopic.php?f=31&amp;t=737&amp;view=previous" class="button" title="Previous topic">Previous topic</a><a href="http://www.javacardos.com/javacardforum/viewtopic.php?f=31&amp;t=737&amp;view=next" class="button" title="Next topic">Next topic</a>	</div>
+
+		<div class="dropdown-container dropdown-button-control topic-tools">
+		<span title="Topic tools" class="button icon-button tools-icon dropdown-trigger dropdown-select dropdown-toggle"></span>
+		<div class="dropdown hidden">
+			<div class="pointer"><div class="pointer-inner"></div></div>
+			<ul class="dropdown-contents">
+																								<li class="small-icon icon-print"><a href="http://www.javacardos.com/javacardforum/viewtopic.php?f=31&amp;t=737&amp;view=print" title="Print view" accesskey="p">Print view</a></li>							</ul>
+		</div>
+	</div>
+
+			<div class="search-box" role="search">
+			<form method="get" id="topic-search" action="./search.php">
+			<fieldset>
+				<input class="inputbox search tiny" name="keywords" id="search_keywords" size="20" placeholder="Search this topic…" type="search">
+				<button class="button icon-button search-icon" type="submit" title="Search">Search</button>
+				<a href="http://www.javacardos.com/javacardforum/search.php" class="button icon-button search-adv-icon" title="Advanced search">Advanced search</a>
+				<input name="t" value="737" type="hidden">
+<input name="sf" value="msgonly" type="hidden">
+
+			</fieldset>
+			</form>
+		</div>
+	
+			<div class="pagination">
+			1 post
+							• Page <strong>1</strong> of <strong>1</strong>
+					</div>
+		</div>
+
+
+			<div id="p2000" class="post has-profile bg2">
+		<div class="inner">
+
+		<dl class="postprofile" id="profile2000">
+			<dt class="no-profile-rank has-avatar">
+				<div class="avatar-container">
+																<a href="http://www.javacardos.com/javacardforum/memberlist.php?mode=viewprofile&amp;u=360" class="avatar"><img src="RSASampleCode_files/file.jpg" alt="User avatar" height="138" width="135"></a>														</div>
+								<a href="http://www.javacardos.com/javacardforum/memberlist.php?mode=viewprofile&amp;u=360" class="username">JavaCardOS</a>							</dt>
+
+			
+		<dd class="profile-posts"><strong>Posts:</strong> <a href="http://www.javacardos.com/javacardforum/search.php?author_id=360&amp;sr=posts">144</a></dd>		<dd class="profile-joined"><strong>Joined:</strong> Thu Apr 30, 2015 12:00 pm</dd>		
+		
+			<dd class="profile-cash"><strong>Points</strong>: 1063
+			</dd>
+				
+							<dd class="profile-contact">
+				<strong>Contact:</strong>
+				<div class="dropdown-container dropdown-left">
+					<a href="#" class="dropdown-trigger dropdown-toggle"><span class="imageset icon_contact" title="Contact JavaCardOS">Contact JavaCardOS</span></a>
+					<div class="dropdown hidden">
+						<div class="pointer"><div class="pointer-inner"></div></div>
+						<div class="dropdown-contents contact-icons">
+																																								<div>
+																	<a href="http://www.javacardos.com/javacardforum/ucp.php?i=pm&amp;mode=compose&amp;action=quotepost&amp;p=2000" title="Send private message">
+										<span class="contact-icon pm-icon">Send private message</span>
+									</a>
+																																																<a href="http://www.javacardos.com/javacardforum/memberlist.php?mode=email&amp;u=360" title="Send email" class="last-cell">
+										<span class="contact-icon email-icon">Send email</span>
+									</a>
+																	</div>
+																					</div>
+					</div>
+				</div>
+			</dd>
+				
+		</dl>
+
+		<div class="postbody">
+						<div id="post_content2000">
+
+			<h3 class="first"><a href="#p2000">The ALgorithm of RSA Sample Code</a></h3>
+
+											<ul class="post-buttons">
+																																									<li>
+							<a href="http://www.javacardos.com/javacardforum/posting.php?mode=quote&amp;f=31&amp;p=2000" title="Reply with quote" class="button icon-button quote-icon"><span>Quote</span></a>
+						</li>
+						 <li>
+							<a href="http://www.javacardos.com/javacardforum/like.php?f=31&amp;t=737&amp;p=2000&amp;i=1" class=" rate_bad" data-ajax="awith_agree"> </a> 
+							
+							<span class="article_no_like">
+								<span class="likes_agree_no">0 </span>  
+							</span>
+
+							<a href="http://www.javacardos.com/javacardforum/like.php?f=31&amp;t=737&amp;p=2000&amp;i=2" class=" rate_good " data-ajax="awith_agree"> </a>
+							<span class="article_like">
+								<span class="likes_agree_yes">0</span>  
+							</span>
+						</li>
+														<li class="responsive-menu hidden dropdown-container"><a href="javascript:void(0);" class="responsive-menu-link dropdown-toggle">&nbsp;</a><div class="dropdown hidden"><div class="pointer"><div class="pointer-inner"></div></div><ul class="dropdown-contents"></ul></div></li></ul>
+							
+						<p class="author"><a href="http://www.javacardos.com/javacardforum/viewtopic.php?p=2000#p2000"><span class="imageset icon_post_target" title="Post">Post</span></a><span class="responsive-hide">by <strong><a href="http://www.javacardos.com/javacardforum/memberlist.php?mode=viewprofile&amp;u=360" class="username">JavaCardOS</a></strong> » </span>Sat Jul 09, 2016 6:01 am </p>
+			
+			
+			
+			<div class="content"><span style="font-size: 110%; line-height: normal">The following code is the ALgorithm of RSA Sample Code in <a href="http://javacardos.com/wiki/index.php/home/index/index/model/java_api/app_name/Signature.html" class="postlink">JavaCard API Specification</a>. <br><br>You can copy and use it directly or you can download the <a target="_blank" href="http://www.javacardos.com/javacardforum/viewforum.php?f=26">JCIDE</a> project from the attachment and build it.<br> </span><br><br><div class="codebox"><p>Code: <a href="#" onclick="selectCode(this); return false;">Select all</a></p><code><br>/*<br>&nbsp;* @file&nbsp; RSASample.java<br>&nbsp;* @version v1.0<br>&nbsp;* Package AID: 4A617661436172644F53 <br>&nbsp;* Applet AID:&nbsp; 4A617661436172644F5303<br>&nbsp;* @brief The ALgorithm of RSA Sample Code in JavaCard API Specification<br>&nbsp;*
+ @comment The purpose of this example is only used to show the usage of 
+API functions and there is no practical significance.<br>&nbsp;* @copyright Copyright(C) 2016 JavaCardOS Technologies Co., Ltd. All rights reserved.<br>&nbsp;*/<br>&nbsp;<br>package JavaCardOS.Sample.Algorithm;<br><br>import javacard.framework.*;<br>import javacard.security.KeyBuilder;<br>import javacard.security.*;<br>import javacardx.crypto.*;<br><br>public class RSASample extends Applet<br>{<br>&nbsp; &nbsp;private static final byte INS_GEN_RSA_KEYPAIR&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = (byte)0x30;<br>&nbsp; &nbsp; private static final byte INS_GET_RSA_PUBKEY&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= (byte)0x31;<br>&nbsp; &nbsp; private static final byte INS_GET_RSA_PRIKEY&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= (byte)0x32;<br>&nbsp; &nbsp; private static final byte INS_SET_RSA_PUBKEY&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= (byte)0x33;<br>&nbsp; &nbsp; private static final byte INS_SET_RSA_PRIKEY&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= (byte)0x34;<br>&nbsp; &nbsp; private static final byte INS_RSA_SIGN&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= (byte)0x35;<br>&nbsp; &nbsp; private static final byte INS_RSA_VERIFY&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= (byte)0x36;<br>&nbsp; &nbsp; private static final byte INS_DO_RSA_CIPHER&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = (byte)0x37;<br><br>&nbsp; &nbsp;private byte[] tempBuffer;<br><br>&nbsp; &nbsp; private byte[] flags;<br>&nbsp; &nbsp; private static final short OFF_INS&nbsp; &nbsp; = (short)0;<br>&nbsp; &nbsp; private static final short OFF_P1&nbsp; &nbsp; &nbsp;= (short)1;<br>&nbsp; &nbsp; private static final short OFF_P2&nbsp; &nbsp; &nbsp;= (short)2;<br>&nbsp; &nbsp; private static final short OFF_LEN&nbsp; &nbsp; = (short)3;<br>&nbsp; &nbsp; private static final short FLAGS_SIZE = (short)5;<br><br>&nbsp; &nbsp;private static final byte ID_N&nbsp; &nbsp;= 0;<br>&nbsp; &nbsp; private static final byte ID_D&nbsp; &nbsp;= 1;<br>&nbsp; &nbsp; private static final byte ID_P&nbsp; &nbsp;= 2;<br>&nbsp; &nbsp; private static final byte ID_Q&nbsp; &nbsp;= 3;<br>&nbsp; &nbsp; private static final byte ID_PQ&nbsp; = 4;<br>&nbsp; &nbsp; private static final byte ID_DP1 = 5;<br>&nbsp; &nbsp; private static final byte ID_DQ1 = 6;<br>&nbsp; &nbsp; <br>&nbsp; &nbsp;private byte[] rsaPubKey;<br>&nbsp; &nbsp; private short rsaPubKeyLen;<br>&nbsp; &nbsp; private byte[] rsaPriKey;<br>&nbsp; &nbsp; private short rsaPriKeyLen;<br>&nbsp; &nbsp; private boolean isRSAPriKeyCRT;<br>&nbsp; &nbsp; private Cipher rsaCipher;&nbsp; &nbsp; <br>&nbsp; &nbsp; private Signature rsaSignature;<br>&nbsp; &nbsp; <br>&nbsp; &nbsp;private static final short SW_REFERENCE_DATA_NOT_FOUND = (short)0x6A88;<br>&nbsp; &nbsp;<br>&nbsp; &nbsp;public RSASample()<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp;//Create a transient byte array to store the temporary data<br>&nbsp; &nbsp; &nbsp; &nbsp; tempBuffer = JCSystem.makeTransientByteArray((short)256, JCSystem.CLEAR_ON_DESELECT);<br>&nbsp; &nbsp; &nbsp; &nbsp; flags = JCSystem.makeTransientByteArray(FLAGS_SIZE, JCSystem.CLEAR_ON_DESELECT);<br><br>&nbsp; &nbsp; &nbsp; &nbsp; rsaPubKey = new byte[(short)&nbsp; &nbsp;(256 + 32)];<br>&nbsp; &nbsp; &nbsp; &nbsp; rsaPriKey = new byte[(short)(128 * 5)];<br>&nbsp; &nbsp; &nbsp; &nbsp; rsaPubKeyLen = 0;<br>&nbsp; &nbsp; &nbsp; &nbsp; rsaPriKeyLen = 0;<br>&nbsp; &nbsp; &nbsp; &nbsp; isRSAPriKeyCRT = false;<br>&nbsp; &nbsp; &nbsp; &nbsp; rsaSignature = null;<br>&nbsp; &nbsp; &nbsp; &nbsp; //Create a RSA(not pad) object instance<br>&nbsp; &nbsp; &nbsp; &nbsp; rsaCipher = Cipher.getInstance(Cipher.ALG_RSA_NOPAD, false);<br><br>&nbsp; &nbsp; &nbsp; &nbsp; JCSystem.requestObjectDeletion();<br>&nbsp; &nbsp; }<br>&nbsp; &nbsp; <br>&nbsp; &nbsp;public static void install(byte[] bArray, short bOffset, byte bLength) <br>&nbsp; &nbsp;{<br>&nbsp; &nbsp;&nbsp; &nbsp;new RSASample().register(bArray, (short) (bOffset + 1), bArray[bOffset]);<br>&nbsp; &nbsp;}<br><br>&nbsp; &nbsp;public void process(APDU apdu)<br>&nbsp; &nbsp;{<br>&nbsp; &nbsp;&nbsp; &nbsp;if (selectingApplet())<br>&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;return;<br>&nbsp; &nbsp;&nbsp; &nbsp;}<br><br>&nbsp; &nbsp;&nbsp; &nbsp;byte[] buf = apdu.getBuffer();<br>&nbsp; &nbsp;&nbsp; &nbsp;short len = apdu.setIncomingAndReceive();<br>&nbsp; &nbsp;&nbsp; &nbsp;switch (buf[ISO7816.OFFSET_INS])<br>&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp; &nbsp;&nbsp; &nbsp;case INS_GEN_RSA_KEYPAIR:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//GEN_RSA_KEYPAIR<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;genRsaKeyPair(apdu, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case INS_GET_RSA_PUBKEY:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//GET_RSA_PUBKEY<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; getRsaPubKey(apdu, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case INS_GET_RSA_PRIKEY:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//GET_RSA_PRIKEY<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;getRsaPriKey(apdu, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case INS_SET_RSA_PUBKEY:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// SET_RSA_PUBKEY<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; setRsaPubKey(apdu, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case INS_SET_RSA_PRIKEY:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//SET_RSA_PRIKEY<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; setRsaPriKey(apdu, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case INS_RSA_SIGN:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//RSA_SIGN<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rsaSign(apdu, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case INS_RSA_VERIFY:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//RSA_VERIFY<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rsaVerify(apdu, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case INS_DO_RSA_CIPHER:&nbsp; &nbsp;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//RSA_CIPHER<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;doRSACipher(apdu, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;break;<br>&nbsp; &nbsp;&nbsp; &nbsp;default:<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);<br>&nbsp; &nbsp;&nbsp; &nbsp;}<br>&nbsp; &nbsp;}<br>&nbsp; &nbsp;<br>&nbsp; &nbsp;//RSA algorithm encrypt and decrypt<br>&nbsp; &nbsp;private void doRSACipher(APDU apdu, short len)<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp;byte[] buffer = apdu.getBuffer();<br>&nbsp; &nbsp; &nbsp; &nbsp; byte p1Tmp = buffer[ISO7816.OFFSET_P1];<br>&nbsp; &nbsp; &nbsp; &nbsp; boolean hasMoreCmd = (p1Tmp &amp; 0x80) != 0;<br>&nbsp; &nbsp; &nbsp; &nbsp; boolean isEncrypt = (p1Tmp &amp; 0x01) != 1;<br>&nbsp;
+ &nbsp; &nbsp; &nbsp;short keyLen = (p1Tmp &amp; 0x08) == (byte)0x00 ? 
+KeyBuilder.LENGTH_RSA_1024 : KeyBuilder.LENGTH_RSA_2048;<br>&nbsp; &nbsp; &nbsp; &nbsp;short offset = (p1Tmp &amp; 0x08) == (byte)0x00 ? (short)128 : (short)256;<br>&nbsp; &nbsp; &nbsp; &nbsp;<br>&nbsp; &nbsp; &nbsp; &nbsp; if (len &lt;= 0)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; //RSA encrypt, Public Key will be used<br>&nbsp; &nbsp; &nbsp; &nbsp; if (isEncrypt)<br>&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//Create uninitialized public key for signature and cipher algorithms.<br>&nbsp;
+ &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;RSAPublicKey pubKey = 
+(RSAPublicKey)KeyBuilder.buildKey(KeyBuilder.TYPE_RSA_PUBLIC, keyLen, 
+false);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;pubKey.setModulus(rsaPubKey, (short)0, offset);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;pubKey.setExponent(rsaPubKey, offset, (short)3);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;if (buffer[ISO7816.OFFSET_P2] == 0x00)<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp;
+ &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//In multiple-part 
+encryption/decryption operations, only the fist APDU command will be 
+used.<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;rsaCipher.init(pubKey, Cipher.MODE_ENCRYPT); <br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;}<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;if (hasMoreCmd)<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp;
+ &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//This method is intended 
+for multiple-part encryption/decryption operations.<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;rsaCipher.update(buffer, ISO7816.OFFSET_CDATA, len, tempBuffer, (short)0);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;}<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;else<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//Generates encrypted output from all input data.<br>&nbsp;
+ &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;short outlen = 
+rsaCipher.doFinal(buffer, ISO7816.OFFSET_CDATA, len, buffer, (short)0);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;apdu.setOutgoingAndSend((short)0, outlen);&nbsp; &nbsp;<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;}<br>&nbsp; &nbsp;&nbsp; &nbsp;}<br>&nbsp; &nbsp;&nbsp; &nbsp;else//RSA decrypt, Private Key will be used<br>&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;if (!isRSAPriKeyCRT)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//RSA Alogrithm, create uninitialized private key for decypt<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;RSAPrivateKey priKey = 
+(RSAPrivateKey)KeyBuilder.buildKey(KeyBuilder.TYPE_RSA_PRIVATE, keyLen, 
+false);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//Set the modulus value of the key.<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;priKey.setModulus(rsaPriKey, (short)0, offset);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//Sets the private exponent value of the key<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;priKey.setExponent(rsaPriKey, offset, offset);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;if (buffer[ISO7816.OFFSET_P2] == 0x00)<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp;
+ &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//In 
+multiple-part encryption/decryption operations, only the fist APDU 
+command will be used.<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;rsaCipher.init(priKey, Cipher.MODE_DECRYPT);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;}<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;if (hasMoreCmd)<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp;
+ &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//This method
+ is intended for multiple-part encryption/decryption operations.<br>&nbsp;
+ &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;rsaCipher.update(buffer, ISO7816.OFFSET_CDATA, len, tempBuffer, 
+(short)0);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;}<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;else<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp;
+ &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;short outlen =
+ rsaCipher.doFinal(buffer, ISO7816.OFFSET_CDATA, len, buffer, (short)0);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;apdu.setOutgoingAndSend((short)0, outlen);&nbsp; &nbsp;<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;}<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//RSA CRT Algorithm, 
+need to create uninitialized private key and set the value of some 
+parameters, such as P Q PQ DP DQ.执行解密运算前，设置私钥<br>&nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;RSAPrivateCrtKey priCrtKey = 
+(RSAPrivateCrtKey)KeyBuilder.buildKey(KeyBuilder.TYPE_RSA_CRT_PRIVATE, 
+keyLen, false);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; priCrtKey.setP(rsaPriKey, (short)0, (short)(offset / 2));<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; priCrtKey.setQ(rsaPriKey, (short)(offset / 2), (short)(offset / 2));<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; priCrtKey.setPQ(rsaPriKey, (short)offset, (short)(offset / 2));<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+priCrtKey.setDP1(rsaPriKey, (short)(offset + offset / 2), (short)(offset
+ / 2));<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; priCrtKey.setDQ1(rsaPriKey, (short)(offset * 2), (short)(offset / 2));<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (buffer[ISO7816.OFFSET_P2] == 0x00)<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//Initializes the Cipher object with the appropriate Key. <br>&nbsp;
+ &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//In 
+multiple-part encryption/decryption operations, only the fist APDU 
+command will be used.<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;rsaCipher.init(priCrtKey, Cipher.MODE_DECRYPT);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;}<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;if (hasMoreCmd)<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp;
+ &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//This method
+ is intended for multiple-part encryption/decryption operations.<br>&nbsp;
+ &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;rsaCipher.update(buffer, ISO7816.OFFSET_CDATA, len, tempBuffer, 
+(short)0);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;}<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;else<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;{<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//Generates decrypted output from all input data.<br>&nbsp;
+ &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;short outlen =
+ rsaCipher.doFinal(buffer, ISO7816.OFFSET_CDATA, len, buffer, (short)0);<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;apdu.setOutgoingAndSend((short)0, outlen);&nbsp; &nbsp;<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;}<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp;&nbsp; &nbsp;}&nbsp; &nbsp; &nbsp; &nbsp; <br>&nbsp; &nbsp; }<br>&nbsp; &nbsp; <br>&nbsp; &nbsp; //Get the value of RSA Public Key from the global variable 'rsaPubKey' <br>&nbsp; &nbsp; private void getRsaPubKey(APDU apdu, short len)<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; byte[] buffer = apdu.getBuffer();<br>&nbsp; &nbsp; &nbsp; &nbsp; if (rsaPubKeyLen == 0)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(SW_REFERENCE_DATA_NOT_FOUND);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br><br>&nbsp; &nbsp; &nbsp; &nbsp; short modLen = rsaPubKeyLen &lt;= (128 + 32) ? (short)128 : (short)256;<br>&nbsp; &nbsp; &nbsp; &nbsp; switch (buffer[ISO7816.OFFSET_P1])<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; case 0:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayCopyNonAtomic(rsaPubKey,(short)0,buffer,(short)0,modLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; apdu.setOutgoingAndSend((short)0,modLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case 1:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //get public key E<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; short eLen = (short)(rsaPubKeyLen - modLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayCopyNonAtomic(rsaPubKey,modLen,buffer,(short)0,eLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; apdu.setOutgoingAndSend((short)0,eLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; default:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_INCORRECT_P1P2);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br><br>&nbsp; &nbsp; }<br>&nbsp; &nbsp;//According to the different ID, returns the value/length of RSA Private component<br>&nbsp; &nbsp; private short getRsaPriKeyComponent(byte id, byte[] outBuff, short outOff)<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; if (rsaPriKeyLen == 0)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return (short)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; short modLen;<br>&nbsp; &nbsp; &nbsp; &nbsp; if (isRSAPriKeyCRT)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (rsaPriKeyLen == 64 * 5)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; modLen = (short)128;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; modLen = (short)256;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; else<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (rsaPriKeyLen == 128 * 2)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; modLen = (short)128;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; modLen = (short)256;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; short readOff;<br>&nbsp; &nbsp; &nbsp; &nbsp; short readLen;<br><br>&nbsp; &nbsp; &nbsp; &nbsp; switch (id)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; case ID_N:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //RSA private key N<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (isRSAPriKeyCRT)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return (short)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readOff = (short)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readLen = modLen;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case ID_D:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (isRSAPriKeyCRT)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return (short)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //RSA private key D<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readOff = modLen;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readLen = modLen;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case ID_P:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (!isRSAPriKeyCRT)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return (short)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readOff = (short)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readLen = (short)(modLen / 2);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case ID_Q:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (!isRSAPriKeyCRT)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return (short)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readOff = (short)(modLen / 2);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readLen = (short)(modLen / 2);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case ID_PQ:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (!isRSAPriKeyCRT)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return (short)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readOff = (short)(modLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readLen = (short)(modLen / 2);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case ID_DP1:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (!isRSAPriKeyCRT)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return (short)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readOff = (short)(modLen / 2 * 3);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readLen = (short)(modLen / 2);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; case ID_DQ1:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (!isRSAPriKeyCRT)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return (short)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readOff = (short)(modLen * 2);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readLen = (short)(modLen / 2);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; break;<br>&nbsp; &nbsp; &nbsp; &nbsp; default:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; return 0;<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; Util.arrayCopyNonAtomic(rsaPriKey, readOff, outBuff, outOff, readLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; return readLen;<br>&nbsp; &nbsp; }<br><br>&nbsp; &nbsp;//Get the value of RSA Private Key<br>&nbsp; &nbsp; private void getRsaPriKey(APDU apdu, short len)<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; byte[] buffer = apdu.getBuffer();<br>&nbsp; &nbsp; &nbsp; &nbsp; if ((buffer[ISO7816.OFFSET_P1] &amp; 0xff) &gt; 6)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_INCORRECT_P1P2);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; short ret = getRsaPriKeyComponent(buffer[ISO7816.OFFSET_P1], buffer, (short)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; if (ret == 0)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(SW_REFERENCE_DATA_NOT_FOUND);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; apdu.setOutgoingAndSend((short)0, ret);<br>&nbsp; &nbsp; }<br><br>&nbsp; &nbsp;//Set the value of RSA public key<br>&nbsp; &nbsp; private void setRsaPubKey(APDU apdu, short len)<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; byte[] buffer = apdu.getBuffer();<br>&nbsp; &nbsp; &nbsp; &nbsp; if (buffer[ISO7816.OFFSET_P2] == 0) // first block<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rsaPubKeyLen = (short)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_INS, flags, OFF_INS, (short)3);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.setShort(flags, OFF_LEN, (short)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; else<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (flags[OFF_INS] != buffer[ISO7816.OFFSET_INS]<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; || 
+(flags[OFF_P1] &amp; 0x7f) != (buffer[ISO7816.OFFSET_P1] &amp; 0x7f)<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; || 
+(short)(flags[OFF_P2] &amp; 0xff) != (short)((buffer[ISO7816.OFFSET_P2] 
+&amp; 0xff) - 1))<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayFillNonAtomic(flags, (short)0, (short)flags.length, (byte)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_INCORRECT_P1P2);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; flags[OFF_P2] ++;<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; short loadedLen = Util.getShort(flags, OFF_LEN);<br>&nbsp; &nbsp; &nbsp; &nbsp; if (loadedLen + len &gt; rsaPubKey.length)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayFillNonAtomic(flags, (short)0, (short)flags.length, (byte)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_WRONG_DATA);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp;&nbsp; &nbsp;//Copy the value of RSA public key&nbsp; to the global variable 'rsaPubKey'. <br>&nbsp; &nbsp; &nbsp; &nbsp; Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_CDATA, rsaPubKey, loadedLen, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; loadedLen += len;<br><br>&nbsp; &nbsp; &nbsp; &nbsp; if ((buffer[ISO7816.OFFSET_P1] &amp; 0x80) == 0) //last block<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayFillNonAtomic(flags, (short)0, (short)flags.length, (byte)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; short modLen = (buffer[ISO7816.OFFSET_P1] &amp; 0x01) == 0 ? (short)128 : (short)256;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (loadedLen &lt; modLen + 3 || loadedLen &gt; modLen + 32)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_WRONG_DATA);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rsaPubKeyLen = loadedLen;<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; else<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.setShort(flags, OFF_LEN, loadedLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br><br>&nbsp; &nbsp; }<br><br>&nbsp; &nbsp;//Set the value of RSA private key<br>&nbsp; &nbsp; private void setRsaPriKey(APDU apdu, short len)<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; byte[] buffer = apdu.getBuffer();<br>&nbsp; &nbsp; &nbsp; &nbsp; if (buffer[ISO7816.OFFSET_P2] == 0) // first block<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rsaPriKeyLen = (short)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_INS, flags, OFF_INS, (short)3);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.setShort(flags, OFF_LEN, (short)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; else<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (flags[OFF_INS] != buffer[ISO7816.OFFSET_INS]<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; || 
+(flags[OFF_P1] &amp; 0x7f) != (buffer[ISO7816.OFFSET_P1] &amp; 0x7f)<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; || 
+(short)(flags[OFF_P2] &amp; 0xff) != (short)((buffer[ISO7816.OFFSET_P2] 
+&amp; 0xff) - 1))<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayFillNonAtomic(flags, (short)0, (short)flags.length, (byte)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_INCORRECT_P1P2);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; flags[OFF_P2] ++;<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; short loadedLen = Util.getShort(flags, OFF_LEN);<br>&nbsp; &nbsp; &nbsp; &nbsp; if (loadedLen + len &gt; rsaPriKey.length)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayFillNonAtomic(flags, (short)0, (short)flags.length, (byte)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_WRONG_DATA);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp;&nbsp; &nbsp;//Copy the value of RSA private key&nbsp; to the global variable 'rsaPriKey'.<br>&nbsp; &nbsp;&nbsp; &nbsp;Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_CDATA, rsaPriKey, loadedLen, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; loadedLen += len;<br><br>&nbsp; &nbsp; &nbsp; &nbsp; if ((buffer[ISO7816.OFFSET_P1] &amp; 0x80) == 0) //last block<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayFillNonAtomic(flags, (short)0, (short)flags.length, (byte)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; short modLen = (buffer[ISO7816.OFFSET_P1] &amp; 0x01) == 0 ? (short)128 : (short)256;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; boolean isCRT = (buffer[ISO7816.OFFSET_P1] &amp; 0x40) != 0;<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if ((isCRT &amp;&amp; (loadedLen != 
+modLen / 2 * 5)) || (!isCRT &amp;&amp; (loadedLen != modLen * 2)))<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_WRONG_DATA);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; isRSAPriKeyCRT = isCRT;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rsaPriKeyLen = loadedLen;<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; else<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.setShort(flags, OFF_LEN, loadedLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; }<br>&nbsp; &nbsp; //<br>&nbsp; &nbsp;private void genRsaKeyPair(APDU apdu, short len)<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; byte[] buffer = apdu.getBuffer();<br>&nbsp; &nbsp; &nbsp; &nbsp; short keyLen = buffer[ISO7816.OFFSET_P1] == 0 ? (short)1024 : (short)2048;<br>&nbsp; &nbsp; &nbsp; &nbsp; byte alg = buffer[ISO7816.OFFSET_P2] == 0 ? KeyPair.ALG_RSA : KeyPair.ALG_RSA_CRT;<br>&nbsp; &nbsp; &nbsp; &nbsp; KeyPair keyPair = new KeyPair(alg, keyLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; if (len &gt; 32)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; if (len &gt; 0)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ((RSAPublicKey)keyPair.getPublic()).setExponent(buffer, ISO7816.OFFSET_CDATA, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; //(Re)Initializes the key objects encapsulated in this KeyPair instance with new key values.<br>&nbsp; &nbsp; &nbsp; &nbsp; keyPair.genKeyPair();<br>&nbsp; &nbsp; &nbsp; &nbsp; JCSystem.beginTransaction();<br>&nbsp; &nbsp; &nbsp; &nbsp; rsaPubKeyLen = 0;<br>&nbsp; &nbsp; &nbsp; &nbsp; rsaPriKeyLen = 0;<br>&nbsp; &nbsp; &nbsp; &nbsp; JCSystem.commitTransaction();<br>&nbsp; &nbsp; &nbsp; &nbsp; //Get a reference to the public key component of this 'keyPair' object.<br>&nbsp; &nbsp; &nbsp; &nbsp; RSAPublicKey pubKey = (RSAPublicKey)keyPair.getPublic();<br>&nbsp; &nbsp; &nbsp; &nbsp; short pubKeyLen = 0;<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; //Store the RSA public key value in the global 
+variable 'rsaPubKey', the public key contains modulo N and Exponent E<br>&nbsp; &nbsp; &nbsp; &nbsp; pubKeyLen += pubKey.getModulus(rsaPubKey, pubKeyLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; pubKeyLen += pubKey.getExponent(rsaPubKey, pubKeyLen);<br><br>&nbsp; &nbsp; &nbsp; &nbsp; short priKeyLen = 0;<br>&nbsp; &nbsp; &nbsp; &nbsp; if (alg == KeyPair.ALG_RSA)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;isRSAPriKeyCRT = false;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//Returns a reference to the private key component of this KeyPair object.<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RSAPrivateKey priKey = (RSAPrivateKey)keyPair.getPrivate();<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //RSA Algorithm,&nbsp; the Private 
+Key contains N and D, and store these parameters value in global 
+variable 'rsaPriKey'.<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; priKeyLen += priKey.getModulus(rsaPriKey, priKeyLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; priKeyLen += priKey.getExponent(rsaPriKey, priKeyLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; else //RSA CRT<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;isRSAPriKeyCRT =&nbsp; true;<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//The RSAPrivateCrtKey interface is 
+used to sign data using the RSA algorithm in its Chinese Remainder 
+Theorem form.<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RSAPrivateCrtKey priKey = (RSAPrivateCrtKey)keyPair.getPrivate();<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //RSA CRT Algorithm,&nbsp; the 
+Private Key contains P Q PQ DP and DQ, and store these parameters value 
+in global variable 'rsaPriKey'.<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; priKeyLen += priKey.getP(rsaPriKey, priKeyLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; priKeyLen += priKey.getQ(rsaPriKey, priKeyLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; priKeyLen += priKey.getPQ(rsaPriKey, priKeyLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; priKeyLen += priKey.getDP1(rsaPriKey, priKeyLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; priKeyLen += priKey.getDQ1(rsaPriKey, priKeyLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br><br>&nbsp; &nbsp; &nbsp; &nbsp; JCSystem.beginTransaction();<br>&nbsp; &nbsp; &nbsp; &nbsp; rsaPubKeyLen = pubKeyLen;<br>&nbsp; &nbsp; &nbsp; &nbsp; rsaPriKeyLen = priKeyLen;<br>&nbsp; &nbsp; &nbsp; &nbsp; JCSystem.commitTransaction();<br><br>&nbsp; &nbsp; &nbsp; &nbsp; JCSystem.requestObjectDeletion();<br>&nbsp; &nbsp; }<br>&nbsp; &nbsp;//RSA Signature<br>&nbsp; &nbsp; private void rsaSign(APDU apdu, short len)<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; byte[] buffer = apdu.getBuffer();<br>&nbsp; &nbsp; &nbsp; &nbsp; if (rsaPriKeyLen == 0)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_CONDITIONS_NOT_SATISFIED);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; boolean hasMoreCmd = (buffer[ISO7816.OFFSET_P1] &amp; 0x80) != 0;<br>&nbsp; &nbsp; &nbsp; &nbsp; short resultLen = 0;<br>&nbsp; &nbsp; &nbsp; &nbsp; if (buffer[ISO7816.OFFSET_P2] == 0) //first block<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Key key;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (!isRSAPriKeyCRT)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; short ret;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //Creates uninitialized private keys for signature algorithms.<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; key = 
+KeyBuilder.buildKey(KeyBuilder.TYPE_RSA_PRIVATE, (short)(rsaPriKeyLen / 2
+ * 8), false);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ret = getRsaPriKeyComponent(ID_N, tempBuffer, (short)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ((RSAPrivateKey)key).setModulus(tempBuffer, (short)0, ret);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ret = getRsaPriKeyComponent(ID_D, tempBuffer, (short)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ((RSAPrivateKey)key).setExponent(tempBuffer, (short)0, ret);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; short ret;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //Creates uninitialized private keys for signature algorithms.<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; key = 
+KeyBuilder.buildKey(KeyBuilder.TYPE_RSA_CRT_PRIVATE, 
+(short)(rsaPriKeyLen / 5 * 16), false);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ret = getRsaPriKeyComponent(ID_P, tempBuffer, (short)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ((RSAPrivateCrtKey)key).setP(tempBuffer, (short)0, ret);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ret = getRsaPriKeyComponent(ID_Q, tempBuffer, (short)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ((RSAPrivateCrtKey)key).setQ(tempBuffer, (short)0, ret);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ret = getRsaPriKeyComponent(ID_DP1, tempBuffer, (short)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ((RSAPrivateCrtKey)key).setDP1(tempBuffer, (short)0, ret);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ret = getRsaPriKeyComponent(ID_DQ1, tempBuffer, (short)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ((RSAPrivateCrtKey)key).setDQ1(tempBuffer, (short)0, ret);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ret = getRsaPriKeyComponent(ID_PQ, tempBuffer, (short)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ((RSAPrivateCrtKey)key).setPQ(tempBuffer, (short)0, ret);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;// Creates a Signature object instance of the ALG_RSA_SHA_PKCS1 algorithm.<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rsaSignature = Signature.getInstance(Signature.ALG_RSA_SHA_PKCS1, false);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; JCSystem.requestObjectDeletion();<br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//Initializ the Signature object.<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rsaSignature.init(key, Signature.MODE_SIGN);<br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_INS, flags, OFF_INS, (short)3);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; JCSystem.requestObjectDeletion();<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; else<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (flags[OFF_INS] != buffer[ISO7816.OFFSET_INS]<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; || 
+(flags[OFF_P1] &amp; 0x7f) != (buffer[ISO7816.OFFSET_P1] &amp; 0x7f)<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; || 
+(short)(flags[OFF_P2] &amp; 0xff) != (short)((buffer[ISO7816.OFFSET_P2] 
+&amp; 0xff) - 1))<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayFillNonAtomic(flags, (short)0, (short)flags.length, (byte)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_INCORRECT_P1P2);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; flags[OFF_P2] ++;<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br><br>&nbsp; &nbsp; &nbsp; &nbsp; if (hasMoreCmd)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;// Accumulates a signature of the input data. <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rsaSignature.update(buffer, ISO7816.OFFSET_CDATA, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; else<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//Generates the signature of all input data.<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; short ret = rsaSignature.sign(buffer, ISO7816.OFFSET_CDATA, len, buffer, (short)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayFillNonAtomic(flags, (short)0, (short)flags.length, (byte)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; apdu.setOutgoingAndSend((short)0, ret);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; }<br>&nbsp; &nbsp; //RSA Signature and Verify<br>&nbsp; &nbsp; private void rsaVerify(APDU apdu, short len)<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; byte[] buffer = apdu.getBuffer();<br>&nbsp; &nbsp; &nbsp; &nbsp; if (rsaPubKeyLen == 0)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_CONDITIONS_NOT_SATISFIED);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; boolean hasMoreCmd = (buffer[ISO7816.OFFSET_P1] &amp; 0x80) != 0;<br>&nbsp; &nbsp; &nbsp; &nbsp; short resultLen = 0;<br>&nbsp; &nbsp; &nbsp; &nbsp; short offset = ISO7816.OFFSET_CDATA;<br>&nbsp; &nbsp; &nbsp; &nbsp; short modLen = rsaPubKeyLen &gt; 256 ? (short)256 : (short)128;<br>&nbsp; &nbsp; &nbsp; &nbsp; if (buffer[ISO7816.OFFSET_P2] == 0) //first block<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Key key;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; // Create uninitialized public keys for signature&nbsp; algorithms.<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; key = KeyBuilder.buildKey(KeyBuilder.TYPE_RSA_PUBLIC, (short)(modLen * 8), false);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //Sets the modulus value of the key. <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ((RSAPublicKey)key).setModulus(rsaPubKey, (short)0, modLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //Sets the public exponent value of the key.<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ((RSAPublicKey)key).setExponent(rsaPubKey, modLen, (short)(rsaPubKeyLen - modLen));<br><br>&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;//Create a ALG_RSA_SHA_PKCS1 object instance.<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rsaSignature = Signature.getInstance(Signature.ALG_RSA_SHA_PKCS1, false);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; JCSystem.requestObjectDeletion();<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //Initializes the Signature object with the appropriate Key. <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rsaSignature.init(key, Signature.MODE_VERIFY);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_INS, flags, OFF_INS, (short)3);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.setShort(flags, OFF_LEN, (short)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; JCSystem.requestObjectDeletion();<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; else<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (flags[OFF_INS] != buffer[ISO7816.OFFSET_INS]<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; || 
+(flags[OFF_P1] &amp; 0x7f) != (buffer[ISO7816.OFFSET_P1] &amp; 0x7f)<br>&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; || 
+(short)(flags[OFF_P2] &amp; 0xff) != (short)((buffer[ISO7816.OFFSET_P2] 
+&amp; 0xff) - 1))<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayFillNonAtomic(flags, (short)0, (short)flags.length, (byte)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_INCORRECT_P1P2);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; flags[OFF_P2] ++;<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br><br>&nbsp; &nbsp; &nbsp; &nbsp; short sigLen = Util.getShort(flags, OFF_LEN);<br>&nbsp; &nbsp; &nbsp; &nbsp; if (sigLen &lt; modLen)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; short readLen = (short)(modLen - sigLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (readLen &gt; len)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; readLen = len;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_CDATA, tempBuffer, sigLen, readLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; sigLen += readLen;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; len -= readLen;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.setShort(flags, OFF_LEN, sigLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; offset += readLen;<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; if (hasMoreCmd)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (len &gt; 0)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;//Accumulates a signature of the input data. <br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rsaSignature.update(buffer, offset, len);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; else<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (sigLen != modLen)<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayFillNonAtomic(flags, (short)0, (short)flags.length, (byte)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ISOException.throwIt(ISO7816.SW_WRONG_DATA);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //Verify the signature of all/last input data against the passed in signature.<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; boolean ret = rsaSignature.verify(buffer, offset, len, tempBuffer, (short)0, sigLen);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Util.arrayFillNonAtomic(flags, (short)0, (short)flags.length, (byte)0);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; buffer[(short)0] = ret ? (byte)1 : (byte)0;<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; apdu.setOutgoingAndSend((short)0, (short)1);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; }<br>&nbsp; &nbsp; <br>}<br></code></div><br><br><span style="font-size: 110%; line-height: normal"><br><span style="font-weight: bold">Note:</span><br>The purpose of this example is only used to show the usage of RSA algorithm .</span></div>
+
+			
+						<div class="rules">You do not have the required permissions to view the files attached to this post. Please <a href="http://www.javacardos.com/javacardforum/ucp.php?mode=login&amp;redirect=.%2Fviewtopic.php%3Ff%3D31%26t%3D737">login</a> first.</div>			
+									
+						</div>
+
+		</div>
+
+		<div class="back2top"><a href="#top" class="top" title="Top">Top</a></div>
+
+		</div>
+	</div>
+
+	<hr class="divider">
+	
+
+
+<div class="action-bar bottom">
+	<div class="buttons">
+		
+			<a href="http://www.javacardos.com/javacardforum/posting.php?mode=reply&amp;f=31&amp;t=737" class="button icon-button reply-icon" title="Post a reply">
+			Post Reply		</a>
+	
+		<a href="http://www.javacardos.com/javacardforum/viewtopic.php?f=31&amp;t=737&amp;view=previous" class="button" title="Previous topic">Previous topic</a><a href="http://www.javacardos.com/javacardforum/viewtopic.php?f=31&amp;t=737&amp;view=next" class="button" title="Next topic">Next topic</a>	</div>
+
+		<div class="dropdown-container dropdown-button-control topic-tools">
+		<span title="Topic tools" class="button icon-button tools-icon dropdown-trigger dropdown-select dropdown-toggle"></span>
+		<div class="dropdown hidden">
+			<div class="pointer"><div class="pointer-inner"></div></div>
+			<ul class="dropdown-contents">
+																								<li class="small-icon icon-print"><a href="http://www.javacardos.com/javacardforum/viewtopic.php?f=31&amp;t=737&amp;view=print" title="Print view" accesskey="p">Print view</a></li>							</ul>
+		</div>
+	</div>
+
+	
+			<div class="pagination">
+			1 post
+							• Page <strong>1</strong> of <strong>1</strong>
+					</div>
+		<div class="clear"></div>
+</div>
+
+
+	<p class="jumpbox-return"><a href="http://www.javacardos.com/javacardforum/viewforum.php?f=31" class="left-box arrow-left" accesskey="r">Return to “Applets Development Guide”</a></p>
+
+
+	<div class="dropdown-container dropdown-container-right dropdown-up dropdown-left dropdown-button-control" id="jumpbox">
+		<span title="Jump to" class="dropdown-trigger button dropdown-select dropdown-toggle">
+			Jump to		</span>
+		<div class="dropdown hidden">
+			<div class="pointer"><div class="pointer-inner"></div></div>
+			<ul class="dropdown-contents">
+																			<li><a href="http://www.javacardos.com/javacardforum/viewforum.php?f=37">GENERAL</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=38">Announcements</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=28">Shopping FAQ</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=15">Questions &amp; Answers</a></li>
+																<li><a href="http://www.javacardos.com/javacardforum/viewforum.php?f=1">JavaCard Development Kit</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=26">JAVACOS Tool</a></li>
+																<li>&nbsp; &nbsp;&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=5">Products Release</a></li>
+																<li>&nbsp; &nbsp;&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=3">User Guide</a></li>
+																<li>&nbsp; &nbsp;&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=4">Questions &amp; Answers</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=24">JCOP Tool</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=39">pyResMan</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=41">pyGlobalPlatform</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=25">Other Tools</a></li>
+																<li><a href="http://www.javacardos.com/javacardforum/viewforum.php?f=13">JavaCard Application</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=31">Applets Development Guide</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=17">Open Source Applets</a></li>
+																<li>&nbsp; &nbsp;&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=30">JCAlgTest</a></li>
+																<li>&nbsp; &nbsp;&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=32">PassportApplet</a></li>
+																<li>&nbsp; &nbsp;&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=33">OpenEMV</a></li>
+																<li>&nbsp; &nbsp;&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=34">PKIApplet</a></li>
+																<li>&nbsp; &nbsp;&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=35">FluffyPGPApplet</a></li>
+																<li>&nbsp; &nbsp;&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=36">OpenPGPApplet</a></li>
+																<li>&nbsp; &nbsp;&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=40">MuscleApplet</a></li>
+																<li>&nbsp; &nbsp;&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=42">Ykneo Oath Applet</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=43">Solutions</a></li>
+																<li><a href="http://www.javacardos.com/javacardforum/viewforum.php?f=18">DEVELOPMENT DEVICE RESOURCE</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=19">Reader</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=20">Card Products</a></li>
+																<li><a href="http://www.javacardos.com/javacardforum/viewforum.php?f=7">Discussions</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=11">Communication</a></li>
+																<li>&nbsp; &nbsp;<a href="http://www.javacardos.com/javacardforum/viewforum.php?f=12">Algorithm School</a></li>
+										</ul>
+		</div>
+	</div>
+
+
+	<div class="stat-block online-list">
+		<h3><a href="http://www.javacardos.com/javacardforum/viewonline.php">Who is online</a></h3>
+		<p>Users browsing this forum: No registered users and 1 guest</p>
+	</div>
+
+			<div id="disclaimer">
+		<div class="rules">
+			<div class="inner">
+				<a href="#" id="disclaimer">JavaCard OS&nbsp;:&nbsp;Disclaimer</a>
+				<div class="disclaimer" style="display:none"><h3>Board Disclaimer</h3>
+	<p>The views and comments posted in these fora are personal and do not 
+necessarily represent the those of the Management of JavaCard OS.<br><br>The
+ Management of JavaCard OS does not, under any circumstances whatsoever,
+ accept any responsibility for any advice, or recommentations, made by, 
+or implied by, any member or guest vistor of JavaCard OS that results in
+ any loss whatsoever in any manner to a member of JavaCard OS, or to any
+ other person.<br><br>Furthermore, the Management of JavaCard OS is not,
+ and cannot be, responsible for the content of any other Internet 
+site(s) that have been linked to from JavaCard OS.</p></div>
+			</div>
+		</div>
+	</div>
+	</div>
+
+
+<div id="page-footer" role="contentinfo">
+	<div class="navbar" role="navigation">
+	<div class="inner">
+
+	<ul id="nav-footer" class="linklist bulletin" role="menubar">
+		<li class="small-icon icon-home breadcrumbs">
+			<span class="crumb"><a href="http://javacardos.com/" data-navbar-reference="home" title="Welcome to JavaCardOS">Welcome to JavaCardOS</a></span>						<span class="crumb"><a href="http://www.javacardos.com/javacardforum/index.php" data-navbar-reference="index" title="JavaCardForum">JavaCardForum</a></span>
+					</li>
+		
+				<li class="responsive-menu hidden rightside dropdown-container"><a href="javascript:void(0);" class="responsive-menu-link dropdown-toggle">&nbsp;</a><div class="dropdown hidden"><div class="pointer"><div class="pointer-inner"></div></div><ul class="dropdown-contents"></ul></div></li><li class="rightside">All times are <abbr title="America/Boa Vista">UTC-04:00</abbr></li>
+							<li class="small-icon icon-delete-cookies rightside"><a href="http://www.javacardos.com/javacardforum/ucp.php?mode=delete_cookies" data-ajax="true" data-refresh="true" role="menuitem">Delete all board cookies</a></li>
+			<li class="small-icon icon-members rightside" data-last-responsive="true"><a href="http://www.javacardos.com/javacardforum/memberlist.php" title="View complete list of members" role="menuitem">Members</a></li>						<li class="small-icon icon-team rightside" data-last-responsive="true"><a href="http://www.javacardos.com/javacardforum/memberlist.php?mode=team" role="menuitem">The team</a></li>				<li class="small-icon icon-contact rightside" data-last-responsive="true"><a href="http://www.javacardos.com/javacardforum/memberlist.php?mode=contactadmin" role="menuitem">Contact us</a></li>	</ul>
+
+	</div>
+</div>
+
+	<div class="copyright">
+		
+		 
+			<div class="wrapper">
+			  <div class="listc">
+				<div style="float: left; font-size: 18px; margin-top: 35px; color: rgb(45, 96, 204);">Follow us </div>
+				<ul>
+				  <li class="facebook"><a target="_blank" href="https://www.facebook.com/javacardos/" onclick="window.open(this.href);return false;" rel="nofollow"><i class="fa fa-facebook fa-2x"></i></a></li>
+				  <!--<li class="twitter"><a href="#"><i class="fa fa-twitter fa-2x"></i></a></li>-->
+				  <li class="youtube"><a target="_blank" href="https://www.youtube.com/channel/UCSwlRXzE23YjNUtTehgId2Q" onclick="window.open(this.href);return false;" rel="nofollow"><i class="fa fa-youtube-play fa-2x"></i></a></li>
+				  <li class="google"><a target="_blank" href="https://plus.google.com/u/0/108299747699711850430" onclick="window.open(this.href);return false;" rel="nofollow"><i class="fa fa-google-plus fa-2x"></i></a></li>
+				 <!-- <li class="linkedin"><a href="#"><i class="fa fa-linkedin fa-2x"></i></a></li>-->
+				</ul>
+			  </div>
+			</div>
+	 <div style="text-align:center;clear:both;">
+			<hr>
+				 ©2015-2016 JavaCardOS Technologies. All rights reserved.　|　<a href="http://www.javacardos.com/about/disclaimer.php" target="_blank">Disclaimer</a>
+									</div>
+
+	<div id="darkenwrapper" data-ajax-error-title="AJAX error" data-ajax-error-text="Something went wrong when processing your request." data-ajax-error-text-abort="User aborted request." data-ajax-error-text-timeout="Your request timed out; please try again." data-ajax-error-text-parsererror="Something went wrong with the request and the server returned an invalid reply.">
+		<div id="darken">&nbsp;</div>
+	</div>
+
+	<div id="phpbb_alert" class="phpbb_alert" data-l-err="Error" data-l-timeout-processing-req="Request timed out.">
+		<a href="#" class="alert_close"></a>
+		<h3 class="alert_title">&nbsp;</h3><p class="alert_text"></p>
+	</div>
+	<div id="phpbb_confirm" class="phpbb_alert">
+		<a href="#" class="alert_close"></a>
+		<div class="alert_text"></div>
+	</div>
+</div>
+
+</div>
+
+<div>
+	<a id="bottom" class="anchor" accesskey="z"></a>
+	<img src="RSASampleCode_files/cron.gif" alt="cron" height="1" width="1"></div>
+
+<script type="text/javascript" src="RSASampleCode_files/jquery.js"></script>
+<script type="text/javascript" src="RSASampleCode_files/core.js"></script>
+<script type="text/javascript" src="RSASampleCode_files/jquery-ui.js"></script>
+<script type="text/javascript" src="RSASampleCode_files/comment.js"></script>
+
+		
+	<script type="text/javascript">
+jQuery(function() {
+	source=removeSubdomain(location.hostname);
+	$('a[href^="http://"], a[href^="https://"]').filter(function(){return this.hostname&&removeSubdomain(this.hostname)!==source}).attr("onclick","window.open(this.href);return false;").attr("rel", "nofollow");
+});
+function removeSubdomain(a,b){return a.split(".").slice(-(b||2)).join(".")};
+</script>
+
+<script type="text/javascript" src="RSASampleCode_files/boardannouncements.js"></script>
+
+<script type="text/javascript" src="RSASampleCode_files/forum_fn.js"></script>
+
+<script type="text/javascript" src="RSASampleCode_files/ajax.js"></script>
+
+<script type="text/javascript" src="RSASampleCode_files/disclaimer_fn.js"></script>
+
+<script type="text/javascript" src="RSASampleCode_files/caramel.js"></script>
+
+
+
+ 
+ 
+ 
+
+
+
+</div><div id="zenmate-widget" style="display: none;"><div id="message" class="plain">
+  <div id="plain-widget">
+    <img class="logo" src="RSASampleCode_files/zenmateLogoBlack.png" srcset="resource://firefox-at-zenmate-dot-com/data/images/zenmateLogoBlack@2x.png 2x">
+    <hr>
+    <h1 id="headline">You're using ZenMate Free.</h1>
+    <div id="description">Buy ZenMate Premium for only €6.49 with turbo speed for HD quality streaming!</div>
+    <button id="submit-btn" data-url="">Upgrade to Premium</button>
+  </div>
+
+  <iframe id="iframe-widget" allowfullscreen="" src="" height="250" frameborder="0" width="300"></iframe>
+
+  <button id="dismiss-btn">Remind me later</button>
+</div>
+
+<div title="You're protected by ZenMate" id="toggle-btn" class="active"></div>
+</div><script style="display: none;" aria-hidden="true" type="application/x-lastpass" id="hiddenlpsubmitdiv"></script><script>try{(function() { for(var lastpass_iter=0; lastpass_iter < document.forms.length; lastpass_iter++){ var lastpass_f = document.forms[lastpass_iter]; if(typeof(lastpass_f.lpsubmitorig2)=="undefined"){ lastpass_f.lpsubmitorig2 = lastpass_f.submit; if (typeof(lastpass_f.lpsubmitorig2)=='object'){ continue;}lastpass_f.submit = function(){ var form=this; var customEvent = document.createEvent("Event"); customEvent.initEvent("lpCustomEvent", true, true); var d = document.getElementById("hiddenlpsubmitdiv"); if (d) {for(var i = 0; i < document.forms.length; i++){ if(document.forms[i]==form){ if (typeof(d.innerText) != 'undefined') { d.innerText=i.toString(); } else { d.textContent=i.toString(); } } } d.dispatchEvent(customEvent); }form.lpsubmitorig2(); } } }})()}catch(e){}</script></body></html>
