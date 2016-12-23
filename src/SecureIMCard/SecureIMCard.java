@@ -16,6 +16,13 @@ import javacardx.crypto.Cipher;
 
 public class SecureIMCard extends Applet
 {
+    /*SELECT the APDU:                    00 A4 04 00 0A A0 40 41 42 43 44 45 46 10 01 00
+    * Gen the ECC keypair:                80 41 01 00 00 -> 90 00
+    * Gen the secret:                     80 50 00 00 00 -> B7 78 66 03 0E 65 5F 06 A0 74 17 CA DB C0 38 90 E7 6E 53 B4 [90 00] (20 byte hex secret)
+    * Pad to create DES key:              80 51 00 00 00 -> B7 78 66 03 0E 65 5F 06 A0 74 17 CA DB C0 38 90 E7 6E 53 B4 00 00 00 00 [90 00] (Above but with 4 bytes of 00 padding)
+    * Do DES Cipher (encryption):         80 60 00 00 08 68 65 6C 6C 6F 62 6F 62 00 -> 48 6F 9F 44 40 FC ED 44 [90 00] ("hellobob encrypted")
+    * Do DES Cipher (decryption):         80 60 01 00 08 48 6F 9F 44 40 FC ED 44 00 -> 68 65 6C 6C 6F 62 6F 62 [90 00] ("hellobob decrypted")
+     * */
 
     private static final byte INS_ECC_GEN_KEYPAIR = (byte) 0x41;
     private static final byte INS_ECC_GENA = (byte) 0x42;
