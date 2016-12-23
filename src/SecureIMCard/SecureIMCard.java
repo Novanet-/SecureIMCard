@@ -51,6 +51,12 @@ public class SecureIMCard extends Applet
     private static final short SW_APDU_NO_T0_REISSUE = (short) 0x6C86;
     private static final short SW_APDU_BUFFER_BOUNDS = (short) 0x6C87;
 
+    private static final short SW_NEGATIVE_ARRAY = (short) 0x6D80;
+    private static final short SW_SYSTEM_EXCEPTION = (short) 0x6D80;
+
+    private static final short SW_ARRAY_INDEX_OOB = (short) 0x6B91;
+    private static final short SW_NULL_POINTER = (short) 0x6D80;
+
     private static final short FLAGS_SIZE = (short) 5;
     private byte[] tempBuffer;
     private byte[] flags;
@@ -67,9 +73,13 @@ public class SecureIMCard extends Applet
     private DESKey desKey;
     private byte[] desKeyData;
 
+    private KeyPair testEccKey = null;
+    private boolean test;
+
 
     public SecureIMCard()
     {
+
         try
         {
             //Create a transient byte array to store the temporary data
@@ -84,79 +94,97 @@ public class SecureIMCard extends Applet
 
             desEcbCipher = Cipher.getInstance(Cipher.ALG_DES_ECB_PKCS5, false);
 
+            test = true;
+
 
             JCSystem.requestObjectDeletion();
+        }
+        catch (NegativeArraySizeException e)
+        {
+            ISOException.throwIt(SW_NEGATIVE_ARRAY);
+        }
+        catch (SystemException e)
+        {
+            ISOException.throwIt(SW_SYSTEM_EXCEPTION);
         }
         catch (CryptoException e)
         {
             HandleCryptoException(e);
         }
+
     }
 
 
     public static void install(byte[] bArray, short bOffset, byte bLength)
     {
-        new SecureIMCard().register(bArray, (short) (bOffset + 1), bArray[bOffset]);
+            new SecureIMCard().register(bArray, (short) (bOffset + 1), bArray[bOffset]);
     }
 
 
     public void process(APDU apdu)
     {
-        if (selectingApplet())
+        try
         {
-            return;
-        }
+            if (selectingApplet())
+            {
+                return;
+            }
 
-        byte[] buf = apdu.getBuffer();
-        short len = apdu.setIncomingAndReceive();
-        switch (buf[ISO7816.OFFSET_INS])
+            byte[] buf = apdu.getBuffer();
+            short len = apdu.setIncomingAndReceive();
+            switch (buf[ISO7816.OFFSET_INS])
+            {
+                case INS_ECC_GEN_KEYPAIR:
+                    // GEN_KEYPAIR
+                    GenEccKeyPair(apdu, len);
+                    break;
+                case INS_ECC_GENA:
+                    // ECC_GENA
+                    getEccKeyA(apdu, len);
+                    break;
+                case INS_ECC_GENP:
+                    // ECC_GENP
+                    getEccKeyP(apdu, len);
+                    break;
+                case INS_ECC_GENS:
+                    // ECC_GENS
+                    getEccKeyS(apdu, len);
+                    break;
+                case INS_ECC_GENW:
+                    // ECC_GENW
+                    getEccKeyW(apdu, len);
+                    break;
+                case INS_ECC_SETS: //PrivateKey
+                    // ECC_SETS
+                    setEccKeyS(apdu, len);
+                    break;
+                case INS_ECC_SETW: //PublicKey
+                    // ECC_SETW
+                    setEccKeyW(apdu, len);
+                    break;
+                case INS_ECC_SIGN:
+                    // ECC_SIGN
+                    Ecc_Sign(apdu, len);
+                    break;
+                case INS_ECC_VERIFY:
+                    //ECC_VERIFY
+                    Ecc_Verify(apdu, len);
+                case INS_ECC_GEN_SECRET:
+                    Ecc_Gen_Secret(apdu, len);
+                    break;
+                case INS_ECC_GEN_3DES_KEY:
+                    gen3DESKeyFromSecret(apdu, len, secret, (short) secret.length, (short) 24);
+                    break;
+                case INS_ECC_DO_DES_CIPHER:
+                    doDesCipher(apdu, len);
+                    break;
+                default:
+                    ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
+            }
+        }
+        catch (APDUException e)
         {
-            case INS_ECC_GEN_KEYPAIR:
-                // GEN_KEYPAIR
-                GenEccKeyPair(apdu, len);
-                break;
-            case INS_ECC_GENA:
-                // ECC_GENA
-                getEccKeyA(apdu, len);
-                break;
-            case INS_ECC_GENP:
-                // ECC_GENP
-                getEccKeyP(apdu, len);
-                break;
-            case INS_ECC_GENS:
-                // ECC_GENS
-                getEccKeyS(apdu, len);
-                break;
-            case INS_ECC_GENW:
-                // ECC_GENW
-                getEccKeyW(apdu, len);
-                break;
-            case INS_ECC_SETS: //PrivateKey
-                // ECC_SETS
-                setEccKeyS(apdu, len);
-                break;
-            case INS_ECC_SETW: //PublicKey
-                // ECC_SETW
-                setEccKeyW(apdu, len);
-                break;
-            case INS_ECC_SIGN:
-                // ECC_SIGN
-                Ecc_Sign(apdu, len);
-                break;
-            case INS_ECC_VERIFY:
-                //ECC_VERIFY
-                Ecc_Verify(apdu, len);
-            case INS_ECC_GEN_SECRET:
-                Ecc_Gen_Secret(apdu, len);
-                break;
-            case INS_ECC_GEN_3DES_KEY:
-                gen3DESKeyFromSecret(apdu, len, secret, (short) secret.length, (short) 24);
-                break;
-            case INS_ECC_DO_DES_CIPHER:
-                doDesCipher(apdu, len);
-                break;
-            default:
-                ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
+            HandleAPDUException(e);
         }
     }
 
@@ -203,19 +231,36 @@ public class SecureIMCard extends Applet
     //The plain text length of input key data is 8 bytes for DES, 16 bytes for 2-key triple DES and 24 bytes for 3-key triple DES.
     private Key getDesKey()
     {
-        Key tempDesKey = null;
-        switch (desKeyLen)
+        try
         {
-            case (byte)24:
-                tempDesKey = desKey;
-                break;
-            default:
-                ISOException.throwIt(ISO7816.SW_CONDITIONS_NOT_SATISFIED);
-                break;
+            Key tempDesKey = null;
+            switch (desKeyLen)
+            {
+                case (byte) 24:
+                    tempDesKey = desKey;
+                    break;
+                default:
+                    ISOException.throwIt(ISO7816.SW_CONDITIONS_NOT_SATISFIED);
+                    break;
+            }
+            //Set the 'desKey' key data value into the internal representation
+            ((DESKey) tempDesKey).setKey(desKeyData, (short) 0);
+            return tempDesKey;
         }
-        //Set the 'desKey' key data value into the internal representation
-        ((DESKey)tempDesKey).setKey(desKeyData, (short)0);
-        return tempDesKey;
+        catch (CryptoException e)
+        {
+            HandleCryptoException(e);
+        }
+        catch (NullPointerException e)
+        {
+            ISOException.throwIt(SW_NULL_POINTER);
+
+        }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            ISOException.throwIt(SW_ARRAY_INDEX_OOB);
+        }
+        return null;
     }
 
     private void doDesCipher(final APDU apdu, final short len)
@@ -249,9 +294,18 @@ public class SecureIMCard extends Applet
         try
         {
             byte[] buffer = apdu.getBuffer();
-            byte[] publicKey = new byte[128];
-            short publicKeyLength = ((ECPublicKey) (eccKey.getPublic())).getW(publicKey, (short) 0);
-            //			Util.arrayCopyNonAtomic(buffer, (short) ISO7816.OFFSET_CDATA, publicKey, (short) 0, len);
+            byte[] publicKey = new byte[]{};
+
+            Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_CDATA, publicKey, (short) 0, len);
+            short publicKeyLength = (short) publicKey.length;
+
+            if (test)
+            {
+                publicKeyLength = ((ECPublicKey) (testEccKey.getPublic())).getW(publicKey, (short) 0);
+            }
+
+//            short publicKeyLength = ((ECPublicKey) (eccKey.getPublic())).getW(publicKey, (short) 0);
+
             ECPrivateKey privateKey = (ECPrivateKey) eccKey.getPrivate();
             ecdhc.init(privateKey);
             byte[] privateKeyByte = new byte[128];
@@ -276,11 +330,11 @@ public class SecureIMCard extends Applet
         }
         catch (ArrayIndexOutOfBoundsException e)
         {
-            ISOException.throwIt((short) 0x6B91);
+            ISOException.throwIt(SW_ARRAY_INDEX_OOB);
         }
         catch (NullPointerException e)
         {
-            ISOException.throwIt((short) 0x6B92);
+            ISOException.throwIt(SW_NULL_POINTER);
         }
     }
 
@@ -298,25 +352,26 @@ public class SecureIMCard extends Applet
                     //Constructs a KeyPair instance for the specified algorithm and keylength;
                     eccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
                     keyLen = (short) 24;
+
+                    if (test)
+                    {
+                        testEccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
+                    }
+
                     break;
-                //			case (byte) 0x02:
-                //				//Here, the KeyBuilder.LENGTH_EC_FP_256 only be used in JavaCard API 3.0.4
-                //				eccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_256);
-                //				keyLen = (short) 32;
-                //				break;
-                //			case (byte) 0x03: // 384
-                //				//Here, the KeyBuilder.LENGTH_EC_FP_384 only be used in JavaCard API 3.0.4
-                //				eccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_384);
-                //				keyLen = (short) 48;
-                //				break;
                 default:
-                    //				ISOException.throwIt(ISO7816.SW_INCORRECT_P1P2);
                     eccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
                     keyLen = (short) 24;
                     break;
             }
             //(Re)Initializes the key objects encapsulated in this 'eccKey' KeyPair instance with new key values.
             eccKey.genKeyPair();
+
+            if (test)
+            {
+                testEccKey.genKeyPair();
+            }
+
             eccKeyLen = keyLen;
         }
         catch (CryptoException e)
