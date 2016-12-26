@@ -60,6 +60,8 @@ public class SecureIMCard extends Applet
     private static final short SW_UNKNOWN_CRYPTO_EXCEPTION = (short) 0x6E80;
     private static final short SW_UNKNOWN_APDU_EXCEPTION = (short) 0x6E81;
 
+    private static final short SW_TRANSACTION_EXCEPTIOn = (short) 0x6F80;
+
     private static final short FLAGS_SIZE = (short) 5;
     private byte[] tempBuffer;
     private byte[] flags;
@@ -163,7 +165,7 @@ public class SecureIMCard extends Applet
                     break;
                 case INS_ECC_SETW: //PublicKey
                     // ECC_SETW
-                    setEccKeyW(apdu, len);
+                    setGuestEccKeyW(apdu, len);
                     break;
                 case INS_ECC_SIGN:
                     // ECC_SIGN
@@ -297,7 +299,7 @@ public class SecureIMCard extends Applet
         try
         {
             byte[] buffer = apdu.getBuffer();
-            byte[] otherPublicKeyArray = new byte[] {};
+            byte[] otherPublicKeyArray = new byte[64];
 
             testEccKey.genKeyPair();
             short otherPublicKeyLength = Util.getShort(tempBuffer, (short) 128);
@@ -536,32 +538,51 @@ public class SecureIMCard extends Applet
     //Set the value of ECC public key(SetW)
     private void setGuestEccKeyW(APDU apdu, short len)
     {
-        byte[] buffer = apdu.getBuffer();
-        switch (buffer[ISO7816.OFFSET_P1])
+        try
         {
-            case (byte) 0x01: // 192 key
-                if (len != 24 * 2 + 1)
-                {
-                    ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
-                }
-                eccKeyLen = 24;
-                //Constructs a KeyPair instance for the ALG_EC_FP algorithm and keylength is 192;
-                testEccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
-                break;
-            default:
-                if (len != 24 * 2 + 1)
-                {
-                    ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
-                }
-                eccKeyLen = 24;
-                //Constructs a KeyPair instance for the ALG_EC_FP algorithm and keylength is 192;
-                eccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
-                //				ISOException.throwIt(ISO7816.SW_CONDITIONS_NOT_SATISFIED);
-                break;
+            byte[] buffer = apdu.getBuffer();
+            switch (buffer[ISO7816.OFFSET_P1])
+            {
+                case (byte) 0x01: // 192 key
+                    if (len != 24 * 2 + 1)
+                    {
+                        ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
+                    }
+                    eccKeyLen = 24;
+                    //Constructs a KeyPair instance for the ALG_EC_FP algorithm and keylength is 192;
+                    testEccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
+                    break;
+                default:
+                    if (len != 24 * 2 + 1)
+                    {
+                        ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
+                    }
+                    eccKeyLen = 24;
+                    //Constructs a KeyPair instance for the ALG_EC_FP algorithm and keylength is 192;
+                    testEccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
+                    //				ISOException.throwIt(ISO7816.SW_CONDITIONS_NOT_SATISFIED);
+                    break;
+            }
+            //In tempBuffer, the offset from 128 to 255 positions stored ECC public key, including 128 to 129 store the public key length, 130 to 255 store the private key data
+            Util.setShort(tempBuffer, (short) 128, len);
+            Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_CDATA, tempBuffer, (short) 130, len);
         }
-        //In tempBuffer, the offset from 128 to 255 positions stored ECC public key, including 128 to 129 store the public key length, 130 to 255 store the private key data
-        Util.setShort(tempBuffer, (short) 128, len);
-        Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_CDATA, tempBuffer, (short) 130, len);
+        catch (CryptoException e)
+        {
+            HandleCryptoException(e);
+        }
+        catch (TransactionException e)
+        {
+            ISOException.throwIt(SW_TRANSACTION_EXCEPTIOn);
+        }
+        catch (NullPointerException e)
+        {
+            ISOException.throwIt(SW_NULL_POINTER);
+        }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            ISOException.throwIt(SW_ARRAY_INDEX_OOB);
+        }
     }
 
 
