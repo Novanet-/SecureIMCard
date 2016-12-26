@@ -57,6 +57,9 @@ public class SecureIMCard extends Applet
     private static final short SW_ARRAY_INDEX_OOB = (short) 0x6B91;
     private static final short SW_NULL_POINTER = (short) 0x6D80;
 
+    private static final short SW_UNKNOWN_CRYPTO_EXCEPTION = (short) 0x6E80;
+    private static final short SW_UNKNOWN_APDU_EXCEPTION = (short) 0x6E81;
+
     private static final short FLAGS_SIZE = (short) 5;
     private byte[] tempBuffer;
     private byte[] flags;
@@ -94,7 +97,7 @@ public class SecureIMCard extends Applet
 
             desEcbCipher = Cipher.getInstance(Cipher.ALG_DES_ECB_PKCS5, false);
 
-            test = true;
+            test = false;
 
 
             JCSystem.requestObjectDeletion();
@@ -117,7 +120,7 @@ public class SecureIMCard extends Applet
 
     public static void install(byte[] bArray, short bOffset, byte bLength)
     {
-            new SecureIMCard().register(bArray, (short) (bOffset + 1), bArray[bOffset]);
+        new SecureIMCard().register(bArray, (short) (bOffset + 1), bArray[bOffset]);
     }
 
 
@@ -294,15 +297,23 @@ public class SecureIMCard extends Applet
         try
         {
             byte[] buffer = apdu.getBuffer();
-            byte[] publicKey = new byte[]{};
+            byte[] otherPublicKeyArray = new byte[] {};
 
-            Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_CDATA, publicKey, (short) 0, len);
-            short publicKeyLength = (short) publicKey.length;
+            testEccKey.genKeyPair();
+            short otherPublicKeyLength = Util.getShort(tempBuffer, (short) 128);
+            // Sets the point of the curve comprising the public key.
+            ((ECPublicKey) testEccKey.getPublic()).setW(tempBuffer, (short) 130, otherPublicKeyLength);
 
-            if (test)
-            {
-                publicKeyLength = ((ECPublicKey) (testEccKey.getPublic())).getW(publicKey, (short) 0);
-            }
+
+//            if (test)
+//            {
+//                publicKeyLength = ((ECPublicKey) (testEccKey.getPublic())).getW(publicKey, (short) 0);
+//            }
+//            else
+//            {
+//                Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_CDATA, publicKey, (short) 0, len);
+//                publicKeyLength = (short) len;
+//            }
 
 //            short publicKeyLength = ((ECPublicKey) (eccKey.getPublic())).getW(publicKey, (short) 0);
 
@@ -312,7 +323,10 @@ public class SecureIMCard extends Applet
             short privateKeyLength = privateKey.getS(privateKeyByte, (short) 0);
             short secretSize = 0;
 
-            secretSize = ecdhc.generateSecret(publicKey, (short) 0, publicKeyLength, secret, (short) 0);
+            PublicKey otherPublicKey = testEccKey.getPublic();
+            otherPublicKeyLength = ((ECPublicKey) otherPublicKey).getW(otherPublicKeyArray, (short) 0);
+
+            secretSize = ecdhc.generateSecret(otherPublicKeyArray, (short) 0, otherPublicKeyLength, secret, (short) 0);
             Util.arrayCopyNonAtomic(secret, (short) 0, buffer, (short) 0, secretSize);
             //				Util.arrayCopyNonAtomic(publicKey, (short) 0, buffer, (short) 0, publicKeyLength);
             //				Util.arrayCopyNonAtomic(privateKeyByte, (short) 0, buffer, (short) 0, privateKeyLength);
@@ -353,24 +367,21 @@ public class SecureIMCard extends Applet
                     eccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
                     keyLen = (short) 24;
 
-                    if (test)
-                    {
-                        testEccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
-                    }
+
+                    testEccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
 
                     break;
                 default:
                     eccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
                     keyLen = (short) 24;
+
+                    testEccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
                     break;
             }
             //(Re)Initializes the key objects encapsulated in this 'eccKey' KeyPair instance with new key values.
             eccKey.genKeyPair();
 
-            if (test)
-            {
-                testEccKey.genKeyPair();
-            }
+            testEccKey.genKeyPair();
 
             eccKeyLen = keyLen;
         }
@@ -506,26 +517,37 @@ public class SecureIMCard extends Applet
                 //Constructs a KeyPair instance for the ALG_EC_FP algorithm and keylength is 192;
                 eccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
                 break;
-            //			case (byte) 0x02:
-            //				if (len != 32 * 2 + 1)
-            //				{
-            //					ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
-            //				}
-            //				eccKeyLen = 32;
-            //				//Constructs a KeyPai instance for the ALG_EC_FP algorithm and keylength is 256;
-            //				//Here, the KeyBuilder.LENGTH_EC_FP_256 only be used in JavaCard API 3.0.4
-            //				eccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_256);
-            //				break;
-            //			case (byte) 0x03: // 384 key
-            //				if (len != 48 * 2 + 1)
-            //				{
-            //					ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
-            //				}
-            //				eccKeyLen = 48;
-            //				//Constructs a KeyPai instance for the ALG_EC_FP algorithm and keylength is 384;
-            //				//Here, the KeyBuilder.LENGTH_EC_FP_384 only be used in JavaCard API 3.0.4
-            //				eccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_384);
-            //				break;
+            default:
+                if (len != 24 * 2 + 1)
+                {
+                    ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
+                }
+                eccKeyLen = 24;
+                //Constructs a KeyPair instance for the ALG_EC_FP algorithm and keylength is 192;
+                eccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
+                //				ISOException.throwIt(ISO7816.SW_CONDITIONS_NOT_SATISFIED);
+                break;
+        }
+        //In tempBuffer, the offset from 128 to 255 positions stored ECC public key, including 128 to 129 store the public key length, 130 to 255 store the private key data
+        Util.setShort(tempBuffer, (short) 128, len);
+        Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_CDATA, tempBuffer, (short) 130, len);
+    }
+
+    //Set the value of ECC public key(SetW)
+    private void setGuestEccKeyW(APDU apdu, short len)
+    {
+        byte[] buffer = apdu.getBuffer();
+        switch (buffer[ISO7816.OFFSET_P1])
+        {
+            case (byte) 0x01: // 192 key
+                if (len != 24 * 2 + 1)
+                {
+                    ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
+                }
+                eccKeyLen = 24;
+                //Constructs a KeyPair instance for the ALG_EC_FP algorithm and keylength is 192;
+                testEccKey = new KeyPair(KeyPair.ALG_EC_FP, KeyBuilder.LENGTH_EC_FP_192);
+                break;
             default:
                 if (len != 24 * 2 + 1)
                 {
@@ -624,6 +646,7 @@ public class SecureIMCard extends Applet
                 ISOException.throwIt(SW_CRYPTO_NO_SUCH_ALGORITHM);
                 break;
             default:
+                ISOException.throwIt(SW_UNKNOWN_CRYPTO_EXCEPTION);
                 break;
         }
     }
@@ -655,6 +678,7 @@ public class SecureIMCard extends Applet
                 ISOException.throwIt(SW_APDU_NO_T0_REISSUE);
                 break;
             default:
+                ISOException.throwIt(SW_UNKNOWN_APDU_EXCEPTION);
                 break;
         }
     }
