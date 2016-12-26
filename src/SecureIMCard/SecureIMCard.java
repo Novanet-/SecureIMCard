@@ -35,6 +35,7 @@ public class SecureIMCard extends Applet
     private static final byte INS_ECC_VERIFY = (byte) 0x49;
     private static final byte INS_ECC_GEN_SECRET = (byte) 0x50;
     private static final byte INS_ECC_GEN_3DES_KEY = (byte) 0x51;
+    private static final byte INS_ECC_SET_INPUT_TEXT = (byte) 0x59;
     private static final byte INS_ECC_DO_DES_CIPHER = (byte) 0x60;
 
     private static final short SW_CRYPTO_UNINITIALIZED_KEY = (short) 0x6B81;
@@ -63,6 +64,7 @@ public class SecureIMCard extends Applet
     private static final short SW_TRANSACTION_EXCEPTIOn = (short) 0x6F80;
 
     private static final short FLAGS_SIZE = (short) 5;
+    private byte[] inputText;
     private byte[] tempBuffer;
     private byte[] flags;
     private short eccKeyLen = (short) 0;
@@ -80,6 +82,7 @@ public class SecureIMCard extends Applet
 
     private KeyPair testEccKey = null;
     private boolean test;
+    private short inputTextLength;
 
 
     public SecureIMCard()
@@ -89,6 +92,7 @@ public class SecureIMCard extends Applet
         {
             //Create a transient byte array to store the temporary data
             tempBuffer = JCSystem.makeTransientByteArray((short) 256, JCSystem.CLEAR_ON_DESELECT);
+            inputText = JCSystem.makeTransientByteArray((short) 256, JCSystem.CLEAR_ON_DESELECT);
             flags = JCSystem.makeTransientByteArray(FLAGS_SIZE, JCSystem.CLEAR_ON_DESELECT);
 
             //Create a ECC(ALG_ECDSA_SHA) object instance
@@ -136,52 +140,55 @@ public class SecureIMCard extends Applet
             }
 
             byte[] buf = apdu.getBuffer();
-            short len = apdu.setIncomingAndReceive();
+            byte apduState = apdu.getCurrentState();
             switch (buf[ISO7816.OFFSET_INS])
             {
                 case INS_ECC_GEN_KEYPAIR:
                     // GEN_KEYPAIR
-                    GenEccKeyPair(apdu, len);
+                    GenEccKeyPair(apdu);
                     break;
                 case INS_ECC_GENA:
                     // ECC_GENA
-                    getEccKeyA(apdu, len);
+                    getEccKeyA(apdu);
                     break;
                 case INS_ECC_GENP:
                     // ECC_GENP
-                    getEccKeyP(apdu, len);
+                    getEccKeyP(apdu);
                     break;
                 case INS_ECC_GENS:
                     // ECC_GENS
-                    getEccKeyS(apdu, len);
+                    getEccKeyS(apdu);
                     break;
                 case INS_ECC_GENW:
                     // ECC_GENW
-                    getEccKeyW(apdu, len);
+                    getEccKeyW(apdu);
                     break;
                 case INS_ECC_SETS: //PrivateKey
                     // ECC_SETS
-                    setEccKeyS(apdu, len);
+                    setEccKeyS(apdu);
                     break;
                 case INS_ECC_SETW: //PublicKey
                     // ECC_SETW
-                    setGuestEccKeyW(apdu, len);
+                    setGuestEccKeyW(apdu);
                     break;
                 case INS_ECC_SIGN:
                     // ECC_SIGN
-                    Ecc_Sign(apdu, len);
+                    Ecc_Sign(apdu);
                     break;
                 case INS_ECC_VERIFY:
                     //ECC_VERIFY
-                    Ecc_Verify(apdu, len);
+                    Ecc_Verify(apdu);
                 case INS_ECC_GEN_SECRET:
-                    Ecc_Gen_Secret(apdu, len);
+                    Ecc_Gen_Secret(apdu);
                     break;
                 case INS_ECC_GEN_3DES_KEY:
-                    gen3DESKeyFromSecret(apdu, len, secret, (short) secret.length, (short) 24);
+                    gen3DESKeyFromSecret(apdu, secret, (short) secret.length, (short) 24);
+                    break;
+                case INS_ECC_SET_INPUT_TEXT:
+                    setInputText(apdu);
                     break;
                 case INS_ECC_DO_DES_CIPHER:
-                    doDesCipher(apdu, len);
+                    doDesCipher(apdu);
                     break;
                 default:
                     ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
@@ -205,7 +212,7 @@ public class SecureIMCard extends Applet
     }
 
 
-    private void gen3DESKeyFromSecret(final APDU apdu, final short len, byte[] secret, short secretSize, short keySize)
+    private void gen3DESKeyFromSecret(final APDU apdu, byte[] secret, short secretSize, short keySize)
     {
         try
         {
@@ -268,11 +275,34 @@ public class SecureIMCard extends Applet
         return null;
     }
 
-    private void doDesCipher(final APDU apdu, final short len)
+    private void setInputText(final APDU apdu)
+    {
+        byte[] buffer = apdu.getBuffer();
+        short len = apdu.setIncomingAndReceive();
+
+        Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_CDATA, buffer, (short) 0, len);
+        inputTextLength = len;
+    }
+    private void doDesCipher(final APDU apdu)
     {
         try
         {
+//            byte[] buffer = apdu.getBuffer();
+//            short len = apdu.setIncomingAndReceive();
+//
+//            byte mode = buffer[ISO7816.OFFSET_P1] == (byte) 0x00 ? Cipher.MODE_ENCRYPT : Cipher.MODE_DECRYPT;
+//            Cipher cipher = desEcbCipher;
+//
+//            Key key = getDesKey();
+//
+//            cipher.init(key, mode);
+//
+//            cipher.doFinal(buffer, ISO7816.OFFSET_CDATA, len, buffer, (short) 0);
+//            apdu.setOutgoingAndSend((short) 0, len);
+
+
             byte[] buffer = apdu.getBuffer();
+
             byte mode = buffer[ISO7816.OFFSET_P1] == (byte) 0x00 ? Cipher.MODE_ENCRYPT : Cipher.MODE_DECRYPT;
             Cipher cipher = desEcbCipher;
 
@@ -280,8 +310,8 @@ public class SecureIMCard extends Applet
 
             cipher.init(key, mode);
 
-            cipher.doFinal(buffer, ISO7816.OFFSET_CDATA, len, buffer, (short) 0);
-            apdu.setOutgoingAndSend((short) 0, len);
+            cipher.doFinal(inputText, (short) 0, inputTextLength, buffer, (short) 0);
+            apdu.setOutgoingAndSend((short) 0, inputTextLength);
         }
         catch (CryptoException e)
         {
@@ -294,7 +324,7 @@ public class SecureIMCard extends Applet
     }
 
 
-    private void Ecc_Gen_Secret(final APDU apdu, final short len)
+    private void Ecc_Gen_Secret(final APDU apdu)
     {
         try
         {
@@ -356,7 +386,7 @@ public class SecureIMCard extends Applet
 
 
     //According to the different key length specified in the incoming APDU , generate ECC key pair and store in the  global variable 'eccKey'
-    private void GenEccKeyPair(APDU apdu, short len)
+    private void GenEccKeyPair(APDU apdu)
     {
         try
         {
@@ -395,7 +425,7 @@ public class SecureIMCard extends Applet
 
 
     //Returns the first coefficient 'A' of the curve of the key.
-    private void getEccKeyA(APDU apdu, short len)
+    private void getEccKeyA(APDU apdu)
     {
         byte[] buffer = apdu.getBuffer();
         ((ECPrivateKey) eccKey.getPrivate()).getA(buffer, (short) 0);
@@ -404,7 +434,7 @@ public class SecureIMCard extends Applet
 
 
     //Returns the field specification parameter value of the key.
-    private void getEccKeyP(APDU apdu, short len)
+    private void getEccKeyP(APDU apdu)
     {
         byte[] buffer = apdu.getBuffer();
         ((ECPrivateKey) eccKey.getPrivate()).getField(buffer, (short) 0);
@@ -413,7 +443,7 @@ public class SecureIMCard extends Applet
 
 
     //Returns the coefficient 'S' of the curve of the key.
-    private void getEccKeyS(APDU apdu, short len)
+    private void getEccKeyS(APDU apdu)
     {
         try
         {
@@ -433,7 +463,7 @@ public class SecureIMCard extends Applet
 
 
     //Returns the coefficient 'W' of the curve of the key.
-    private void getEccKeyW(APDU apdu, short len)
+    private void getEccKeyW(APDU apdu)
     {
         try
         {
@@ -453,9 +483,10 @@ public class SecureIMCard extends Applet
 
 
     //Set the value of ECC private key(SetS)
-    private void setEccKeyS(APDU apdu, short len)
+    private void setEccKeyS(APDU apdu)
     {
         byte[] buffer = apdu.getBuffer();
+        short len = apdu.setIncomingAndReceive();
         switch (buffer[ISO7816.OFFSET_P1])
         {
             case (byte) 0x01: // 192 key
@@ -536,11 +567,12 @@ public class SecureIMCard extends Applet
     }
 
     //Set the value of ECC public key(SetW)
-    private void setGuestEccKeyW(APDU apdu, short len)
+    private void setGuestEccKeyW(APDU apdu)
     {
         try
         {
             byte[] buffer = apdu.getBuffer();
+            short len = apdu.setIncomingAndReceive();
             switch (buffer[ISO7816.OFFSET_P1])
             {
                 case (byte) 0x01: // 192 key
@@ -587,11 +619,13 @@ public class SecureIMCard extends Applet
 
 
     //ECC signature
-    private void Ecc_Sign(APDU apdu, short len)
+    private void Ecc_Sign(APDU apdu)
     {
         try
         {
             byte[] buffer = apdu.getBuffer();
+            short len = apdu.setIncomingAndReceive();
+
             //(Re)Initializes the key objects encapsulated in this KeyPair instance with new key values.
             eccKey.genKeyPair();
             short eccPriKeyLen = Util.getShort(tempBuffer, (short) 0);
@@ -616,11 +650,13 @@ public class SecureIMCard extends Applet
 
 
     //Verify the ECC signature, the format of APDU data field is : the signature data and the data to be verified
-    private void Ecc_Verify(APDU apdu, short len)
+    private void Ecc_Verify(APDU apdu)
     {
         try
         {
             byte[] buffer = apdu.getBuffer();
+            short len = apdu.setIncomingAndReceive();
+
             short signLen = buffer[ISO7816.OFFSET_P1];
             //(Re)Initializes the key objects encapsulated in 'eccKey' KeyPair instance with new key values.
             eccKey.genKeyPair();
