@@ -63,6 +63,9 @@ public class SecureIMCard extends Applet
 
     private static final short SW_TRANSACTION_EXCEPTIOn = (short) 0x6F80;
 
+    private static final short SW_SECURITY_EXCEPTION = (short) 6E80;
+
+
     private static final short FLAGS_SIZE = (short) 5;
     private byte[] inputText;
     private byte[] tempBuffer;
@@ -216,6 +219,8 @@ public class SecureIMCard extends Applet
     {
         try
         {
+            byte apduState = apdu.getCurrentState();
+
             byte[] buffer = apdu.getBuffer();
 
             desKey = (DESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_DES_TRANSIENT_RESET, KeyBuilder.LENGTH_DES3_3KEY, false);
@@ -226,6 +231,9 @@ public class SecureIMCard extends Applet
             //				Util.arrayCopyNonAtomic(publicKey, (short) 0, buffer, (short) 0, publicKeyLength);
             //				Util.arrayCopyNonAtomic(privateKeyByte, (short) 0, buffer, (short) 0, privateKeyLength);
             apdu.setOutgoingAndSend((short) 0, desKeyLen);
+
+            apduState = apdu.getCurrentState();
+
         }
         catch (CryptoException e)
         {
@@ -277,11 +285,37 @@ public class SecureIMCard extends Applet
 
     private void setInputText(final APDU apdu)
     {
+        byte apduState = apdu.getCurrentState();
+
         byte[] buffer = apdu.getBuffer();
         short len = apdu.setIncomingAndReceive();
 
-        Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_CDATA, buffer, (short) 0, len);
+        Util.arrayCopyNonAtomic(buffer, ISO7816.OFFSET_CDATA, inputText, (short) 0, len);
         inputTextLength = len;
+    }
+
+    private void sendAPDU(final APDU apdu, byte[] data, short offset, short length)
+    {
+
+        try
+        {
+            byte apduState = apdu.getCurrentState();
+
+            apdu.setOutgoing();                                   // set transmission to outgoing data
+            apdu.setOutgoingLength((short)length);                    // set the number of bytes to send to the IFD
+            apdu.sendBytesLong(data, (short)offset, (short)length); // send the requested number of bytes to the IFD
+
+            apduState = apdu.getCurrentState();
+
+        }
+        catch (APDUException e)
+        {
+            HandleAPDUException(e);
+        }
+        catch (SecurityException e)
+        {
+            ISOException.throwIt(SW_SECURITY_EXCEPTION);
+        }
     }
     private void doDesCipher(final APDU apdu)
     {
@@ -300,8 +334,11 @@ public class SecureIMCard extends Applet
 //            cipher.doFinal(buffer, ISO7816.OFFSET_CDATA, len, buffer, (short) 0);
 //            apdu.setOutgoingAndSend((short) 0, len);
 
+            byte apduState = apdu.getCurrentState();
 
             byte[] buffer = apdu.getBuffer();
+            byte[] output = new byte[512];
+
 
             byte mode = buffer[ISO7816.OFFSET_P1] == (byte) 0x00 ? Cipher.MODE_ENCRYPT : Cipher.MODE_DECRYPT;
             Cipher cipher = desEcbCipher;
@@ -310,8 +347,12 @@ public class SecureIMCard extends Applet
 
             cipher.init(key, mode);
 
-            cipher.doFinal(inputText, (short) 0, inputTextLength, buffer, (short) 0);
-            apdu.setOutgoingAndSend((short) 0, inputTextLength);
+            short encryptedLength = cipher.doFinal(inputText, (short) 0, inputTextLength, output, (short) 0);
+//            apdu.setOutgoingAndSend((short) 0, inputTextLength);
+            sendAPDU(apdu, output, (short) 0, encryptedLength);
+
+            apduState = apdu.getCurrentState();
+
         }
         catch (CryptoException e)
         {
@@ -328,15 +369,15 @@ public class SecureIMCard extends Applet
     {
         try
         {
+            byte apduState = apdu.getCurrentState();
+
             byte[] buffer = apdu.getBuffer();
-            byte[] otherPublicKeyArray = new byte[64];
+            byte[] otherPublicKeyArray = new byte[49];
 
             testEccKey.genKeyPair();
             short otherPublicKeyLength = Util.getShort(tempBuffer, (short) 128);
             // Sets the point of the curve comprising the public key.
             ((ECPublicKey) testEccKey.getPublic()).setW(tempBuffer, (short) 130, otherPublicKeyLength);
-
-
 //            if (test)
 //            {
 //                publicKeyLength = ((ECPublicKey) (testEccKey.getPublic())).getW(publicKey, (short) 0);
@@ -348,21 +389,22 @@ public class SecureIMCard extends Applet
 //            }
 
 //            short publicKeyLength = ((ECPublicKey) (eccKey.getPublic())).getW(publicKey, (short) 0);
-
             ECPrivateKey privateKey = (ECPrivateKey) eccKey.getPrivate();
             ecdhc.init(privateKey);
-            byte[] privateKeyByte = new byte[128];
-            short privateKeyLength = privateKey.getS(privateKeyByte, (short) 0);
-            short secretSize = 0;
+//            byte[] privateKeyArray = new byte[24];
+//            short privateKeyLength = privateKey.getS(privateKeyArray, (short) 0);
 
             PublicKey otherPublicKey = testEccKey.getPublic();
             otherPublicKeyLength = ((ECPublicKey) otherPublicKey).getW(otherPublicKeyArray, (short) 0);
 
-            secretSize = ecdhc.generateSecret(otherPublicKeyArray, (short) 0, otherPublicKeyLength, secret, (short) 0);
-            Util.arrayCopyNonAtomic(secret, (short) 0, buffer, (short) 0, secretSize);
+            short secretSize = ecdhc.generateSecret(otherPublicKeyArray, (short) 0, otherPublicKeyLength, secret, (short) 0);
+            Util.arrayCopyNonAtomic(secret, (short) 0, buffer, (short) 0, (short) eccKeyLen);
             //				Util.arrayCopyNonAtomic(publicKey, (short) 0, buffer, (short) 0, publicKeyLength);
             //				Util.arrayCopyNonAtomic(privateKeyByte, (short) 0, buffer, (short) 0, privateKeyLength);
-            apdu.setOutgoingAndSend((short) 0, secretSize);
+            apdu.setOutgoingAndSend((short) 0, (short) eccKeyLen);
+
+            apduState = apdu.getCurrentState();
+
             //			apdu.setOutgoingAndSend((short) 0, publicKeyLength);
             //			apdu.setOutgoingAndSend((short) 0, privateKeyLength);
         }
@@ -390,6 +432,8 @@ public class SecureIMCard extends Applet
     {
         try
         {
+            byte apduState = apdu.getCurrentState();
+
             byte[] buffer = apdu.getBuffer();
             short keyLen = (short) 0;
             switch (buffer[ISO7816.OFFSET_P1])
@@ -416,6 +460,9 @@ public class SecureIMCard extends Applet
             testEccKey.genKeyPair();
 
             eccKeyLen = keyLen;
+
+            apduState = apdu.getCurrentState();
+
         }
         catch (CryptoException e)
         {
