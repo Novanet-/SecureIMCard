@@ -14,6 +14,7 @@ import javacard.framework.*;
 import javacard.security.*;
 import javacardx.crypto.Cipher;
 
+
 public class SecureIMCard extends Applet
 {
     /*SELECT the APDU:                    00 A4 04 00 0A A0 40 41 42 43 44 45 46 10 01 00
@@ -36,7 +37,7 @@ public class SecureIMCard extends Applet
     private static final byte INS_ECC_GEN_SECRET = (byte) 0x50;
     private static final byte INS_ECC_GEN_3DES_KEY = (byte) 0x51;
     private static final byte INS_ECC_SET_INPUT_TEXT = (byte) 0x59;
-    private static final byte INS_ECC_DO_DES_CIPHER = (byte) 0x60;
+    private static final byte INS_ECC_DO_DES_CIPHER = (byte) 0x70;
 
     private static final short SW_CRYPTO_UNINITIALIZED_KEY = (short) 0x6B81;
     private static final short SW_CRYPTO_INVALID_INIT = (short) 0x6B82;
@@ -230,7 +231,10 @@ public class SecureIMCard extends Applet
             desKeyLen = desKey.getKey(buffer, (short) 0);
             //				Util.arrayCopyNonAtomic(publicKey, (short) 0, buffer, (short) 0, publicKeyLength);
             //				Util.arrayCopyNonAtomic(privateKeyByte, (short) 0, buffer, (short) 0, privateKeyLength);
-            apdu.setOutgoingAndSend((short) 0, desKeyLen);
+
+            /*apdu.setOutgoingAndSend((short) 0, desKeyLen);*/
+
+            sendAPDU(apdu, buffer, (short) 0, desKeyLen);
 
             apduState = apdu.getCurrentState();
 
@@ -301,9 +305,9 @@ public class SecureIMCard extends Applet
         {
             byte apduState = apdu.getCurrentState();
 
-            apdu.setOutgoing();                                   // set transmission to outgoing data
-            apdu.setOutgoingLength((short)length);                    // set the number of bytes to send to the IFD
-            apdu.sendBytesLong(data, (short)offset, (short)length); // send the requested number of bytes to the IFD
+//            apdu.setOutgoing();                                   // set transmission to outgoing data
+//            apdu.setOutgoingLength((short)length);                    // set the number of bytes to send to the IFD
+//            apdu.sendBytesLong(data, (short)offset, (short)length); // send the requested number of bytes to the IFD
 
             apduState = apdu.getCurrentState();
 
@@ -349,7 +353,15 @@ public class SecureIMCard extends Applet
 
             short encryptedLength = cipher.doFinal(inputText, (short) 0, inputTextLength, output, (short) 0);
 //            apdu.setOutgoingAndSend((short) 0, inputTextLength);
-            sendAPDU(apdu, output, (short) 0, encryptedLength);
+
+
+//            sendAPDU(apdu, output, (short) 0, encryptedLength);
+
+            apdu.setOutgoing();
+
+            apdu.setOutgoingLength(encryptedLength);
+
+            apdu.sendBytesLong(output, (short) 0, encryptedLength);
 
             apduState = apdu.getCurrentState();
 
@@ -401,7 +413,9 @@ public class SecureIMCard extends Applet
             Util.arrayCopyNonAtomic(secret, (short) 0, buffer, (short) 0, (short) eccKeyLen);
             //				Util.arrayCopyNonAtomic(publicKey, (short) 0, buffer, (short) 0, publicKeyLength);
             //				Util.arrayCopyNonAtomic(privateKeyByte, (short) 0, buffer, (short) 0, privateKeyLength);
-            apdu.setOutgoingAndSend((short) 0, (short) eccKeyLen);
+            /*apdu.setOutgoingAndSend((short) 0, (short) eccKeyLen);*/
+
+            sendAPDU(apdu, buffer, (short) 0,  eccKeyLen);
 
             apduState = apdu.getCurrentState();
 
@@ -496,7 +510,11 @@ public class SecureIMCard extends Applet
         {
             byte[] buffer = apdu.getBuffer();
             short length = ((ECPrivateKey) eccKey.getPrivate()).getS(buffer, (short) 0);
-            apdu.setOutgoingAndSend((short) 0, length);
+
+
+            /*apdu.setOutgoingAndSend((short) 0, length);*/
+
+            sendAPDU(apdu, buffer, (short) 0, length);
         }
         catch (CryptoException e)
         {
@@ -516,7 +534,11 @@ public class SecureIMCard extends Applet
         {
             byte[] buffer = apdu.getBuffer();
             short length = ((ECPublicKey) eccKey.getPublic()).getW(buffer, (short) 0);
-            apdu.setOutgoingAndSend((short) 0, length);
+
+
+            /*apdu.setOutgoingAndSend((short) 0, length);*/
+
+            sendAPDU(apdu, buffer, (short) 0, length);
         }
         catch (CryptoException e)
         {
