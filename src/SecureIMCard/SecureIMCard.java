@@ -28,10 +28,10 @@ public class SecureIMCard extends Applet
     private static final byte INS_ECC_GEN_KEYPAIR = (byte) 0x41;
     private static final byte INS_ECC_GENA = (byte) 0x42;
     private static final byte INS_ECC_GENP = (byte) 0x43;
-    private static final byte INS_ECC_GENS = (byte) 0x44;
-    private static final byte INS_ECC_GENW = (byte) 0x45;
-    private static final byte INS_ECC_SETS = (byte) 0x46;
-    private static final byte INS_ECC_SETW = (byte) 0x47;
+    private static final byte INS_ECC_GET_S = (byte) 0x44;
+    private static final byte INS_ECC_GET_W = (byte) 0x45;
+    private static final byte INS_ECC_SET_S = (byte) 0x46;
+    private static final byte INS_ECC_SET_GUEST_W = (byte) 0x47;
     private static final byte INS_ECC_SIGN = (byte) 0x48;
     private static final byte INS_ECC_VERIFY = (byte) 0x49;
     private static final byte INS_ECC_GEN_SECRET = (byte) 0x50;
@@ -159,19 +159,19 @@ public class SecureIMCard extends Applet
                     // ECC_GENP
                     getEccKeyP(apdu);
                     break;
-                case INS_ECC_GENS:
+                case INS_ECC_GET_S:
                     // ECC_GENS
                     getEccKeyS(apdu);
                     break;
-                case INS_ECC_GENW:
+                case INS_ECC_GET_W:
                     // ECC_GENW
                     getEccKeyW(apdu);
                     break;
-                case INS_ECC_SETS: //PrivateKey
+                case INS_ECC_SET_S: //PrivateKey
                     // ECC_SETS
                     setEccKeyS(apdu);
                     break;
-                case INS_ECC_SETW: //PublicKey
+                case INS_ECC_SET_GUEST_W: //PublicKey
                     // ECC_SETW
                     setGuestEccKeyW(apdu);
                     break;
