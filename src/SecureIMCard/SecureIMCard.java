@@ -305,9 +305,9 @@ public class SecureIMCard extends Applet
         {
             byte apduState = apdu.getCurrentState();
 
-//            apdu.setOutgoing();                                   // set transmission to outgoing data
-//            apdu.setOutgoingLength((short)length);                    // set the number of bytes to send to the IFD
-//            apdu.sendBytesLong(data, (short)offset, (short)length); // send the requested number of bytes to the IFD
+            apdu.setOutgoing();                                   // set transmission to outgoing data
+            apdu.setOutgoingLength((short)length);                    // set the number of bytes to send to the IFD
+            apdu.sendBytesLong(data, (short)offset, (short)length); // send the requested number of bytes to the IFD
 
             apduState = apdu.getCurrentState();
 
